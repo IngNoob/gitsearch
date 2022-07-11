@@ -34,10 +34,7 @@ jobs:
       
       #Android build
       - run: flutter build apk
-      - run: flutter build appbundle
-      
-      #iOS build
-      - run: flutter build ios --release --no-codesign
+      - run: flutter build appbundle      
          
   buildIOS:
     runs-on: macos-latest
