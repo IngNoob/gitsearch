@@ -51,11 +51,6 @@ jobs:
         with:
           github-token: ${{ secrets.GITSEARCH_ACTION_TOKEN }}
           skip-on-empty: false
-          
-      - id: debug
-        env:
-         $NEEDS : ${{ toJson(steps.changelog.outputs.tag) }}
-        run: echo "$NEEDS"
 
   buildAndroid:
     name: Runs test build for android
@@ -63,6 +58,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:      
+    
+      - id: debug
+        env:
+         $NEEDS : ${{ toJson(needs.flutterTests.outputs.tag) }}
+        run: echo "$NEEDS"
+        
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
 
