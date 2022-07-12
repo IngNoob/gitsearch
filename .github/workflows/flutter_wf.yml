@@ -50,18 +50,18 @@ jobs:
         uses: TriPSs/conventional-changelog-action@v3
         with:
           github-token: ${{ secrets.GITSEARCH_ACTION_TOKEN }}
+          
+      - id: debug
+        env:
+         $NEEDS : ${{ toJson(steps.changelog.outputs.tag) }}
+        run: echo "$NEEDS"
 
   buildAndroid:
     name: Runs test build for android
     needs: [flutterTests]
     runs-on: ubuntu-latest
 
-    steps:
-      - id: debug
-        env:
-          NEEDS: ${{ toJson(needs) }}
-        run: echo "$NEEDS"
-      
+    steps:      
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
 
