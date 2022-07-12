@@ -50,6 +50,7 @@ jobs:
         uses: TriPSs/conventional-changelog-action@v3
         with:
           github-token: ${{ secrets.GITSEARCH_ACTION_TOKEN }}
+          skip-on-empty: false
           
       - id: debug
         env:
