@@ -79,4 +79,4 @@ jobs:
 
       #IOS build
       - name: Flutter build IOS unsigned ipa
-          run: flutter build ios --release --no-codesign
+        run: flutter build ios --release --no-codesign
