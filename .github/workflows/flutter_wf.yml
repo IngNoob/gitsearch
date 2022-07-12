@@ -20,6 +20,8 @@ jobs:
   flutterTests:
     name: Runs basic flutter tests
     runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.changelog.outputs.tag }}
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -42,6 +44,12 @@ jobs:
         uses: ValentinVignal/action-dart-analyze@v0.13
         with:
           fail-on: 'warning'
+          
+      - name: Conventional Changelog Action
+        id: changelog
+        uses: TriPSs/conventional-changelog-action@v3
+        with:
+          github-token: ${{ secrets.GITSEARCH_ACTION_TOKEN }}
 
   buildAndroid:
     name: Runs test build for android
@@ -104,5 +112,5 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           artifacts: "build/app/outputs/apk/release/*.apk"
-          commit: master
           token: ${{ secrets.GITSEARCH_ACTION_TOKEN }}
+          tag: ${{ jobs.flutterTests.outputs.tag }}
