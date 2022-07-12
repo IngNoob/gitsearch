@@ -57,6 +57,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - id: debug
+        env:
+          NEEDS: ${{ toJson(needs) }}
+        run: echo "$NEEDS"
+      
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
 
@@ -102,6 +107,8 @@ jobs:
     name: Create new release and upload apk files
     needs: [buildAndroid]
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Download result apk
         uses: actions/download-artifact@v3
@@ -114,3 +121,4 @@ jobs:
           artifacts: "build/app/outputs/apk/release/*.apk"
           token: ${{ secrets.GITSEARCH_ACTION_TOKEN }}
           tag: ${{ needs.buildAndroid.needs.flutterTests.outputs.tag }}
+          removeArtifacts: true
