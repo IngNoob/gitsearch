@@ -113,4 +113,4 @@ jobs:
         with:
           artifacts: "build/app/outputs/apk/release/*.apk"
           token: ${{ secrets.GITSEARCH_ACTION_TOKEN }}
-          tag: ${{ jobs.flutterTests.outputs.tag }}
+          tag: ${{ needs.buildAndroid.needs.flutterTests.outputs.tag }}
