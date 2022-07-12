@@ -15,9 +15,9 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  buildAndroid:
-    # The type of runner that the job will run on
+  # This workflow contains multiple jobs
+  flutterTests:
+    name: Runs basic flutter tests
     runs-on: ubuntu-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -38,27 +38,19 @@ jobs:
         run: flutter test
         
       - name: Run repo lint check
-        uses: kitek/dartanalyzer-annotations-action@v1  
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITSEARCH_ACTION_TOKEN }}
-        with:
-          check_name: 'Check code style'
-          commit_sha: ${{ github.event.pull_request.head.sha }}
-      
-      #Android build
-      - name: Flutter build apk test
-        run: flutter build apk
-      - name: Flutter build appbundle
-        run: flutter build appbundle      
-         
-  buildIOS:
-    runs-on: macos-latest
+        uses: zgosalvez/github-actions-analyze-dart@v1  
+
+  buildAndroid:
+    # The type of runner that the job will run on
+    
+    name: Runs test build for android
+    needs: [flutterTests]
+    runs-on: ubuntu-latest
+
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-      # Checks-out the community flutter action
       - uses: subosito/flutter-action@v2
-      
+
       # Basic flutter commands
       - name: Check Flutter version
         run: flutter --version
@@ -66,17 +58,26 @@ jobs:
       - name: Get project packages
         run: flutter pub get
         
-      - name: Do Flutter tests
-        run: flutter test
+      #Android build
+      - name: Flutter build apk test
+        run: flutter build apk
+      - name: Flutter build appbundle
+        run: flutter build appbundle      
+         
+  buildIOS:
+    name: Runs test build for IOS
+    needs: [flutterTests]
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+      
+      - name: Check Flutter version
+        run: flutter --version
         
-      - name: Run repo lint check
-        uses: kitek/dartanalyzer-annotations-action@v1  
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITSEARCH_ACTION_TOKEN }}
-        with:
-          check_name: 'Check code style'
-          commit_sha: ${{ github.event.pull_request.head.sha }}
-
+      - name: Get project packages
+        run: flutter pub get
+        
       #IOS build
       - name: Flutter build IOS unsigned ipa
         run: flutter build ios --release --no-codesign
