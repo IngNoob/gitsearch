@@ -28,13 +28,28 @@ jobs:
       - uses: subosito/flutter-action@v2
 
       # Basic flutter commands
-      - run: flutter --version
-      - run: flutter pub get
-      - run: flutter test
+      - name: Check Flutter version
+        run: flutter --version
+        
+      - name: Get project packages
+        run: flutter pub get
+        
+      - name: Do Flutter tests
+        run: flutter test
+        
+      - name: Run repo lint check
+        uses: kitek/dartanalyzer-annotations-action@v1  
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITSEARCH_ACTION_TOKEN }}
+        with:
+          check_name: 'Check code style'
+          commit_sha: ${{ github.event.pull_request.head.sha }}
       
       #Android build
-      - run: flutter build apk
-      - run: flutter build appbundle      
+      - name: Flutter build apk test
+        run: flutter build apk
+      - name: Flutter build appbundle
+        run: flutter build appbundle      
          
   buildIOS:
     runs-on: macos-latest
@@ -44,6 +59,24 @@ jobs:
       # Checks-out the community flutter action
       - uses: subosito/flutter-action@v2
       
-      - run: flutter pub get
-      - run: flutter test
-      - run: flutter build ios --release --no-codesign
+      # Basic flutter commands
+      - name: Check Flutter version
+        run: flutter --version
+        
+      - name: Get project packages
+        run: flutter pub get
+        
+      - name: Do Flutter tests
+        run: flutter test
+        
+      - name: Run repo lint check
+        uses: kitek/dartanalyzer-annotations-action@v1  
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITSEARCH_ACTION_TOKEN }}
+        with:
+          check_name: 'Check code style'
+          commit_sha: ${{ github.event.pull_request.head.sha }}
+
+      #IOS build
+      - name: Flutter build IOS unsigned ipa
+          run: flutter build ios --release --no-codesign
