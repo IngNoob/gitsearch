@@ -114,7 +114,9 @@ jobs:
       - name: Create a Release APK
         uses: ncipollo/release-action@v1
         with:
-          artifacts: apk-build
+          artifacts: "*.apk"          
           token: ${{ secrets.GITSEARCH_ACTION_TOKEN }}
           tag: ${{ needs.flutterTests.outputs.tag }}
           removeArtifacts: true
+          generateReleaseNotes: true
+          artifactErrorsFailBuild: true
