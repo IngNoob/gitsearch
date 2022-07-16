@@ -18,8 +18,8 @@ class MyApp extends StatelessWidget {
     child:
       MaterialApp(
         title: 'GitSearch',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
+        theme:ThemeData.light().copyWith(
+          colorScheme: const ColorScheme.light().copyWith(primary: Colors.blueGrey)
         ),
         onGenerateRoute: (RouteSettings settings){
 

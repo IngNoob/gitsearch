@@ -21,7 +21,7 @@ class SearchModel extends ChangeNotifier{
   SearchResult _search = SearchResult();
   SearchResult get search => _search;
 
-  Future<void> doSearch() async {
+  Future<void> doSearch(String? keyword) async {
 
     _isBusy = true;
     notifyListeners();
@@ -29,7 +29,7 @@ class SearchModel extends ChangeNotifier{
     final Uri uri = Uri.https(
       baseURL,
       searchEndPoint,
-      <String, String>{'q' : "hongkong" },
+      <String, String>{'q' : keyword! },
     );
     
     final http.Response response = await http.get(
