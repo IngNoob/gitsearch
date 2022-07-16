@@ -2,7 +2,7 @@
 import 'package:gitsearch/Items/license.dart';
 import 'package:gitsearch/Items/owner.dart';
 
-class SearchItem {
+class SearchResultItem {
   int? id;
   String? nodeId;
   String? name;
@@ -80,7 +80,7 @@ class SearchItem {
   String? visibility;
   License? license;
 
-  SearchItem(
+  SearchResultItem(
       {id,
       nodeId,
       name,
@@ -158,7 +158,7 @@ class SearchItem {
       visibility,
       license});
 
-  SearchItem.fromJson(Map<String, dynamic> json) {
+  SearchResultItem.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     nodeId = json['node_id'];
     name = json['name'];

@@ -1,9 +1,9 @@
-import 'package:gitsearch/Items/search_item.dart';
+import 'package:gitsearch/Items/search_result_item.dart';
 
 class SearchResult {
   int? totalCount;
   bool? incompleteResults;
-  List<SearchItem>? items;
+  List<SearchResultItem>? items;
 
   SearchResult({totalCount, incompleteResults, items});
 
@@ -11,9 +11,9 @@ class SearchResult {
     totalCount = json['total_count'];
     incompleteResults = json['incomplete_results'];
     if (json['items'] != null) {
-      items = <SearchItem>[];
+      items = <SearchResultItem>[];
       json['items'].forEach((v) {
-        items!.add(SearchItem.fromJson(v));
+        items!.add(SearchResultItem.fromJson(v));
       });
     }
   }

@@ -1,9 +1,8 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:gitsearch/Items/search_result.dart';
 import 'package:gitsearch/Models/search_model.dart';
-import 'package:gitsearch/search_form_widget.dart';
+import 'package:gitsearch/Widgets/search_form_widget.dart';
+import 'package:gitsearch/Widgets/search_result_item_card.dart';
 
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
@@ -18,12 +17,10 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
 
-  List<Widget> elements = [];
-  Random rng = Random();
+  List<SearchResultItemCard> elements = [];
 
   // Key to avoid rebuilds produced by ModalProgressHUD widget
   GlobalKey<State> formWidgetKey = GlobalKey<State>();
-
 
   @override
   void initState() {
@@ -49,7 +46,7 @@ class _SearchPageState extends State<SearchPage> {
                 builder: (context, sModel, child) {
                   final SearchResult search = sModel.search;
                     if (search.items != null) {
-                    elements= List.generate(search.items?.length ?? 0, (index) => ListTile(title: Text(search.items![index].fullName ?? "***Error***"), tileColor: Color.fromRGBO(rng.nextInt(255), rng.nextInt(255), rng.nextInt(255), 1) ));
+                    elements= List.generate(search.items?.length ?? 0, (index) => SearchResultItemCard(search.items![index]));
                   }
                 
                   return elements.isNotEmpty ? 
@@ -63,11 +60,6 @@ class _SearchPageState extends State<SearchPage> {
         ),
 
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () => Provider.of<SearchModel>(context, listen: false).doSearch(),
-      //   tooltip: 'Search',
-      //   child: const Icon(Icons.search),
-      // ),
     );
   }
 
