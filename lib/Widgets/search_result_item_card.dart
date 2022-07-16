@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gitsearch/Items/search_result_item.dart';
+import 'package:gitsearch/Widgets/search_result_item_detail.dart';
 
 class SearchResultItemCard extends StatefulWidget {
   const SearchResultItemCard(this.item, {Key? key}) : super(key: key);
@@ -20,12 +21,16 @@ class _SearchResultItemCardState extends State<SearchResultItemCard> {
           mainAxisSize: MainAxisSize.min,
           children: [
               ListTile(
-                leading: CircleAvatar(
+                leading: Hero(
+                  tag: widget.item.name as String,
                   child: CircleAvatar(
                     backgroundColor: Theme.of(context).colorScheme.primary,
-                    backgroundImage: widget.item.owner!.avatarUrl != null ? NetworkImage(widget.item.owner!.avatarUrl as String): null,
-                    child: widget.item.owner!.avatarUrl == null ? const Icon(Icons.person, color: Colors.white) : null
-                  ),
+                    child: CircleAvatar(
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      backgroundImage: widget.item.owner!.avatarUrl != null ? NetworkImage(widget.item.owner!.avatarUrl as String): null,
+                      child: widget.item.owner!.avatarUrl == null ? const Icon(Icons.person, color: Colors.white) : null
+                    ),
+                  )
                 ),
                 title: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -40,10 +45,26 @@ class _SearchResultItemCardState extends State<SearchResultItemCard> {
                   ],
                 ),
                 trailing: const Icon(Icons.add),
+                onTap: showDetail,
               )
             ]
         ),
       )
     );
   }
+
+  void showDetail(){
+
+    Navigator.of(context).push(
+      PageRouteBuilder(
+        opaque: false, // set to false
+        barrierDismissible: true,
+        barrierColor: Colors.grey.withOpacity(0.3),
+        transitionDuration: const Duration(milliseconds: 500),
+        transitionsBuilder: (c, anim, a2, child) => FadeTransition(opacity: anim, child: child),
+        pageBuilder: (_, __, ___) => SearchResultItemDetail(widget.item),
+      ),
+    );
+  }
+
 }
