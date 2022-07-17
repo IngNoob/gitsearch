@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:gitsearch/Pages/home_page.dart';
 import 'package:provider/provider.dart';
 
 import 'package:gitsearch/Common/routes.dart';
@@ -30,12 +31,12 @@ class MyApp extends StatelessWidget {
           switch(settings.name){
             case Routes.search:
               return MaterialPageRoute<dynamic>(
-                  builder: (_) => const SearchPage(),
+                  builder: (_) => const SearchPageTab(),
                   settings: settings,
                 );
             default:
               return MaterialPageRoute<dynamic>(
-                  builder: (_) => const SearchPage(),
+                  builder: (_) => const HomePage(),
                   settings: settings,
                 );
           }

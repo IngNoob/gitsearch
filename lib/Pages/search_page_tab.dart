@@ -8,14 +8,14 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
 
 
-class SearchPage extends StatefulWidget {
-  const SearchPage({Key? key}) : super(key: key);
+class SearchPageTab extends StatefulWidget {
+  const SearchPageTab({Key? key}) : super(key: key);
 
   @override
-  State<SearchPage> createState() => _SearchPageState();
+  State<SearchPageTab> createState() => _SearchPageTabState();
 }
 
-class _SearchPageState extends State<SearchPage> {
+class _SearchPageTabState extends State<SearchPageTab> {
 
   List<SearchResultItemCard> elements = [];
 
@@ -43,9 +43,9 @@ class _SearchPageState extends State<SearchPage> {
     final Size screenSize = MediaQuery.of(context).size;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Search Page'),
-      ),
+      // appBar: AppBar(
+      //   title: const Text('Search Page'),
+      // ),
       body: ModalProgressHUD(
         inAsyncCall: Provider.of<SearchModel>(context).isBusy,
         progressIndicator: CircularProgressIndicator(color: Theme.of(context).colorScheme.primary),
