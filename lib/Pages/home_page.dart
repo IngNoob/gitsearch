@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:gitsearch/Pages/history_page_tab.dart';
-import 'package:gitsearch/Pages/search_page.dart';
+import 'package:gitsearch/Pages/search_page_tab.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);

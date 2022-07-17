@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 
 import 'package:gitsearch/Common/routes.dart';
 import 'package:gitsearch/Models/search_model.dart';
-import 'package:gitsearch/Pages/search_page.dart';
+import 'package:gitsearch/Pages/search_page_tab.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
