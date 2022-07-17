@@ -20,11 +20,21 @@ class SearchQuery {
   
    Map<String, dynamic> toMap() {
     return <String, dynamic>{
+      'keyword' : keyword,
+      //'sort': order,
+      //'order': sort,
+      'per_page': perPage,
+      'page': page,    
+    };
+  }
+
+   Map<String, dynamic> toApiMap() {
+    return <String, dynamic>{
       'q' : keyword,
-      'sort': order,
-      'order': sort,
-      'per_page': page,
-      'page': perPage,    
+      //'sort': order,
+      //'order': sort,
+      'per_page': perPage.toString(),
+      'page': page.toString(),
     };
   }
 

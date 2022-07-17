@@ -12,6 +12,7 @@ class SearchResultItemCard extends StatefulWidget {
 }
 
 class _SearchResultItemCardState extends State<SearchResultItemCard> {
+  
   @override
   Widget build(BuildContext context) {
     return Center(
