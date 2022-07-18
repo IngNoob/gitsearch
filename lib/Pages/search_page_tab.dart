@@ -82,15 +82,12 @@ class _SearchPageTabState extends State<SearchPageTab> with AutomaticKeepAliveCl
                     const Center(child: Text("Welcome, press the search button to start")):
                     Column(
                       children: [
+                        // Searched keyword, total results
+                        buildTotalParams(sModel),
                         Container(
-                          alignment: Alignment.centerRight,
-                          padding: const EdgeInsets.symmetric(horizontal: 8),
-                          child: Text(
-                            "${NumberFormat.compact().format(search.totalCount ?? 0)} repositories", 
-                            style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.primary)
-                          )
+                          padding: const EdgeInsets.symmetric(horizontal: 8), 
+                          child: Divider(color: Theme.of(context).colorScheme.primary, thickness: 2,)
                         ),
-                        Divider(color: Theme.of(context).colorScheme.primary, thickness: 2,),
                         Expanded(
                           child: ListView.builder(
                             key: _listViewKey,
@@ -128,11 +125,40 @@ class _SearchPageTabState extends State<SearchPageTab> with AutomaticKeepAliveCl
                
             )
               
-
           ],
         ),
 
       ),
+    );
+  }
+
+  Widget buildTotalParams(SearchModel sModel){
+    
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            decoration: ShapeDecoration(
+              color: Theme.of(context).colorScheme.primary,
+              shape: RoundedRectangleBorder( borderRadius: BorderRadius.circular(4)),
+            ),
+            child: Text(
+              sModel.queryParams.keyword ?? '-',
+              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            ),
+          ),
+          const Spacer(),
+          Container(
+            alignment: Alignment.centerRight,
+            child: Text(
+              "${NumberFormat.compact().format(sModel.searchResult.totalCount ?? 0)} repositories", 
+              style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.primary)
+            )
+          )
+        ],
+      )
     );
   }
 
