@@ -15,16 +15,19 @@ class _SearchFormWidgetState extends State<SearchFormWidget> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final SearchQuery searchData = SearchQuery();
   AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
-  TextEditingController keywordTextController = TextEditingController();
+  final TextEditingController _keywordTextController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+    if(searchData.keyword != null){
+      _keywordTextController.text = searchData.keyword!;
+    }
   }
 
   @override
   void dispose() {
-    keywordTextController.dispose();
+    _keywordTextController.dispose();
     super.dispose();
   }
 
@@ -42,7 +45,7 @@ class _SearchFormWidgetState extends State<SearchFormWidget> {
           child: Column( children: [
             TextFormField(
               maxLength: 20,
-              controller: keywordTextController,
+              controller: _keywordTextController,
               decoration: const InputDecoration(
                 hintText: 'Input search keyword'
               ),

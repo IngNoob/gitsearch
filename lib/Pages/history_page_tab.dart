@@ -14,12 +14,13 @@ class HistoryPageTab extends StatefulWidget {
   State<HistoryPageTab> createState() => _HistoryPageTabState();
 }
 
-class _HistoryPageTabState extends State<HistoryPageTab> {
+class _HistoryPageTabState extends State<HistoryPageTab> with AutomaticKeepAliveClientMixin<HistoryPageTab>{
 
   List<SearchResultItemCard> elements = [];
 
   // PageStorageKey to avoid the listview to reset when new elements are added to the search results and the page gets rebuilt
   final PageStorageKey _listViewKey = const PageStorageKey('historyResult');
+  // Scroll controller to scroll back up new search history results added
   final ScrollController _listScrollCtrl = ScrollController();
 
   @override
@@ -34,7 +35,12 @@ class _HistoryPageTabState extends State<HistoryPageTab> {
   }
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+
+    super.build(context);
 
     final Size screenSize = MediaQuery.of(context).size;
 

@@ -12,13 +12,15 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin, AutomaticKeepAliveClientMixin<HomePage>{
 
+  // Adding mixins for the tabcontroller and to preserve as much data as possible when changing tabs
+
   late TabController _tabController;
   final PageStorageKey _tabviewKey = const PageStorageKey('tabView');
 
   @override
   void initState() {
-    _tabController = TabController(length: 2, vsync: this);
     super.initState();
+    _tabController = TabController(length: 2, vsync: this);
   }
 
   @override
@@ -52,10 +54,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin, Auto
         child: 
           TabBar(
             controller: _tabController,    
-            indicatorWeight: 5,        
+            indicatorWeight: 5,
+            indicatorColor: Colors.white,
             tabs: const <Widget>[
-              Tab(icon:  Icon(Icons.search)),
-              Tab(icon:  Icon(Icons.history)),
+              Tab(icon: Icon(Icons.search, size: 36)),
+              Tab(icon: Icon(Icons.history, size: 36)),
             ],
           )
       )

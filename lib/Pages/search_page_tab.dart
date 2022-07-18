@@ -3,6 +3,7 @@ import 'package:gitsearch/Items/search_result.dart';
 import 'package:gitsearch/Models/search_model.dart';
 import 'package:gitsearch/Widgets/search_form_widget.dart';
 import 'package:gitsearch/Widgets/search_result_item_card.dart';
+import 'package:intl/intl.dart';
 
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
@@ -15,7 +16,7 @@ class SearchPageTab extends StatefulWidget {
   State<SearchPageTab> createState() => _SearchPageTabState();
 }
 
-class _SearchPageTabState extends State<SearchPageTab> {
+class _SearchPageTabState extends State<SearchPageTab> with AutomaticKeepAliveClientMixin<SearchPageTab> {
 
   List<SearchResultItemCard> elements = [];
 
@@ -24,6 +25,7 @@ class _SearchPageTabState extends State<SearchPageTab> {
 
   // PageStorageKey to avoid the listview to reset when new elements are added to the search results and the page gets rebuilt
   final PageStorageKey _listViewKey = const PageStorageKey('searchResult');
+  // Scroll controller to scroll back up on new search
   final ScrollController _listScrollCtrl = ScrollController();
 
   @override
@@ -38,7 +40,12 @@ class _SearchPageTabState extends State<SearchPageTab> {
   }
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+
+    super.build(context);
 
     final Size screenSize = MediaQuery.of(context).size;
 
@@ -52,7 +59,7 @@ class _SearchPageTabState extends State<SearchPageTab> {
         child: Column(
           children: [
 
-            SearchFormWidget(key: _formWidgetKey,),
+            SearchFormWidget(key: _formWidgetKey),
 
             Expanded(
               child: Consumer<SearchModel>(
@@ -68,40 +75,53 @@ class _SearchPageTabState extends State<SearchPageTab> {
 
                   int totalElements = 0;
                   if (sModel.searchResult.totalCount != null){
-                    totalElements = sModel.searchResult.totalCount! > elements.length ? elements.length+1 : elements.length;
+                    totalElements = sModel.searchResult.totalCount! > elements.length ? elements.length + 1 : elements.length;
                   } 
                 
                   return elements.isEmpty ? 
                     const Center(child: Text("Welcome, press the search button to start")):
-                    ListView.builder(
-                      key: _listViewKey,
-                      controller: _listScrollCtrl,
-                      itemCount: totalElements,
-                      itemBuilder: (context, index){
-                        return (index == elements.length && elements.length != search.totalCount) ?
-                          (!sModel.isBusy) ?
-                            Container(
-                              padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.2, vertical: 16),
-                              child: OutlinedButton(
-                                child: const Text("Show more"),
-                                onPressed: () => Provider.of<SearchModel>(context, listen: false).searchNext(), 
-                              )
-                            )
-                            :
-                            
-                            Center(
-                              child: Container(
-                                padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.2, vertical: 16),
-                                child: const Text("Searching ...")
-                              )
-                            )
-                          :
-                          elements[index];
-                      }
-
+                    Column(
+                      children: [
+                        Container(
+                          alignment: Alignment.centerRight,
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: Text(
+                            "${NumberFormat.compact().format(search.totalCount ?? 0)} repositories", 
+                            style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.primary)
+                          )
+                        ),
+                        Divider(color: Theme.of(context).colorScheme.primary, thickness: 2,),
+                        Expanded(
+                          child: ListView.builder(
+                            key: _listViewKey,
+                            controller: _listScrollCtrl,
+                            itemCount: totalElements,
+                            itemBuilder: (context, index){
+                              return (index == elements.length && elements.length != search.totalCount) ?
+                                (!sModel.isBusy) ?
+                                  Container(
+                                    padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.2, vertical: 16),
+                                    child: OutlinedButton(
+                                      child: const Text("Show more"),
+                                      onPressed: () => Provider.of<SearchModel>(context, listen: false).searchNext(), 
+                                    )
+                                  )
+                                  :
+                                  
+                                  Center(
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.2, vertical: 16),
+                                      child: const Text("Searching ...")
+                                    )
+                                  )
+                                :
+                                elements[index];
+                            }
+                          )
+                        )
+                      ],
                     );
-                
-                
+                                
                 }
                     
               )
