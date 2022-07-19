@@ -20,7 +20,6 @@ class HistoryModel extends ChangeNotifier{
 
   Future<void> getHistory() async {
 
-
     _isBusy = true;
     _history = [];
     notifyListeners();
