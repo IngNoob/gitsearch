@@ -40,13 +40,13 @@ class DBHandler {
   Future<int> updateHistoryRecord(var model) async =>
       await _db!.update('history', model.toMap(), 
         where: 'keyword = ?', 
-        whereArgs: model.keyword
+        whereArgs: [model.keyword]
       );
 
   Future<int> deleteHistoryRecord(var model) async =>
       await _db!.delete('history', 
         where: 'keyword = ?', 
-        whereArgs: model.keyword
+        whereArgs: [model.keyword]
       );
 
   Future<int> clearHistory() async =>

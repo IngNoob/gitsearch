@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:gitsearch/Items/history_item.dart';
-import 'package:gitsearch/Items/search_result.dart';
 import 'package:gitsearch/Models/history_model.dart';
-import 'package:gitsearch/Models/search_model.dart';
-import 'package:gitsearch/Widgets/search_result_item_card.dart';
+import 'package:gitsearch/Widgets/history_item_card.dart';
 
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
 
 
 class HistoryPageTab extends StatefulWidget {
-  const HistoryPageTab({Key? key}) : super(key: key);
+  const HistoryPageTab(this.tabController, {Key? key}) : super(key: key);
+
+  final TabController tabController;
+
 
   @override
   State<HistoryPageTab> createState() => _HistoryPageTabState();
@@ -18,7 +19,7 @@ class HistoryPageTab extends StatefulWidget {
 
 class _HistoryPageTabState extends State<HistoryPageTab> with AutomaticKeepAliveClientMixin<HistoryPageTab>{
 
-  List<Text> elements = [];
+  List<HistoryItemCard> elements = [];
 
   // PageStorageKey to avoid the listview to reset when new elements are added to the search results and the page gets rebuilt
   final PageStorageKey _listViewKey = const PageStorageKey('historyResult');
@@ -68,7 +69,7 @@ class _HistoryPageTabState extends State<HistoryPageTab> with AutomaticKeepAlive
                   // if (hModel.queryParams.page == 1 && _listScrollCtrl.positions.isNotEmpty) {
                   //   _listScrollCtrl.animateTo(_listScrollCtrl.position.minScrollExtent, duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
                   // }
-                  elements= List.generate(history.length, (index) => Text(history[index].keyword) );
+                  elements= List.generate(history.length, (index) => HistoryItemCard(history[index], widget.tabController) );
 
                   int totalElements = 0;
                   totalElements = hModel.history.length > elements.length ? elements.length+1 : elements.length;
@@ -102,8 +103,7 @@ class _HistoryPageTabState extends State<HistoryPageTab> with AutomaticKeepAlive
                       }
 
                     );
-                
-                
+                                
                 }
                     
               )

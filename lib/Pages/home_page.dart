@@ -44,9 +44,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin, Auto
       body: TabBarView(
         key: _tabviewKey,
         controller: _tabController,
-        children: const [
-          SearchPageTab(),
-          HistoryPageTab()
+        children:  [
+          const SearchPageTab(),
+          HistoryPageTab(_tabController)
         ]
       ),
       bottomNavigationBar: Container(
