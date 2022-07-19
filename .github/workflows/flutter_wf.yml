@@ -76,12 +76,14 @@ jobs:
         run: flutter build appbundle
         
       - name: Upload result apk
+        if: github.ref == 'refs/heads/master' && github.event_name == 'pull_request'
         uses: actions/upload-artifact@v3
         with:
           name: apk-build
           path: build/app/outputs/apk/release
           
       - name: Upload app bundle
+        if: github.ref == 'refs/heads/master' && github.event_name == 'pull_request'
         uses: actions/upload-artifact@v3
         with:
           name: appbundle
