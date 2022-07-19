@@ -45,8 +45,10 @@ jobs:
         with:
           fail-on: 'warning'
           
+        
       - name: Conventional Changelog Action
         id: changelog
+        if: github.ref == 'refs/heads/master' && github.event_name == 'pull_request'
         uses: TriPSs/conventional-changelog-action@v3
         with:
           github-token: ${{ secrets.GITSEARCH_ACTION_TOKEN }}
