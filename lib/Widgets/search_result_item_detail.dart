@@ -44,7 +44,7 @@ class _SearchResultItemDetailState extends State<SearchResultItemDetail> {
                   child: Column(
                     children: [
                       Hero(
-                        tag: widget.item.name as String,
+                        tag: widget.item.fullName as String,
                         child: Container(
                           child: widget.item.owner!.avatarUrl != null ?
                             Image.network(widget.item.owner!.avatarUrl as String) : 
@@ -103,13 +103,14 @@ class _SearchResultItemDetailState extends State<SearchResultItemDetail> {
                     // Stars and watching
                     Row( mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
+
                         Flexible(
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               Icon(Icons.star_border, color: Theme.of(context).colorScheme.primary ),
                               Flexible(
-                                child: Text(widget.item.stargazersCount! > 0 ? 
+                                child: Text(widget.item.stargazersCount != null ? 
                                   "${NumberFormat.compact().format(widget.item.stargazersCount)}\nstars" : "***Error***", 
                                   overflow: TextOverflow.clip,
                                   textAlign: TextAlign.center,
@@ -124,7 +125,7 @@ class _SearchResultItemDetailState extends State<SearchResultItemDetail> {
                             children: [
                               Icon(Icons.remove_red_eye_outlined, color: Theme.of(context).colorScheme.primary ),
                               Flexible(
-                                child: Text(widget.item.watchersCount! > 0 ? 
+                                child: Text(widget.item.watchersCount != null ? 
                                   "${NumberFormat.compact().format(widget.item.watchersCount)}\nwatching" : "***Error***", 
                                   overflow: TextOverflow.clip,
                                   textAlign: TextAlign.center,
@@ -148,7 +149,7 @@ class _SearchResultItemDetailState extends State<SearchResultItemDetail> {
                             children: [
                               Icon(Icons.fork_right_outlined, color: Theme.of(context).colorScheme.primary ),
                               Flexible(
-                                child: Text(widget.item.forksCount! > 0 ? 
+                                child: Text(widget.item.forksCount != null ?  
                                   "${NumberFormat.compact().format(widget.item.forksCount)}\nforks" : "***Error***", 
                                   overflow: TextOverflow.clip,
                                   textAlign: TextAlign.center,
@@ -163,7 +164,7 @@ class _SearchResultItemDetailState extends State<SearchResultItemDetail> {
                             children: [
                               Icon(Icons.adjust_outlined, color: Theme.of(context).colorScheme.primary ),
                               Flexible(
-                                child: Text(widget.item.openIssuesCount! > 0 ? 
+                                child: Text(widget.item.openIssuesCount != null ? 
                                   "${NumberFormat.compact().format(widget.item.openIssuesCount)}\nissues" : "***Error***", 
                                   overflow: TextOverflow.clip,
                                   textAlign: TextAlign.center,
@@ -179,9 +180,9 @@ class _SearchResultItemDetailState extends State<SearchResultItemDetail> {
                   ],
                 )
               )
-            ],
-          ),
-            const SizedBox(height: 10),
+            
+            ]),
+            const SizedBox(height: 16),
             ElevatedButton.icon(
               icon: const Icon(Icons.close), 
               label: const Text("Close"),
