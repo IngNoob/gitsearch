@@ -1,0 +1,138 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CICD
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: '*'
+  pull_request:
+    branches: [ "master" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+
+  # This workflow contains multiple jobs
+  flutterTests:
+    name: Runs flutter tests
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.changelog.outputs.tag }}
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+      # Checks-out the community flutter action
+      - uses: subosito/flutter-action@v2
+
+      # Basic flutter commands
+      - name: Check Flutter version
+        run: flutter --version
+        
+      - name: Get project packages
+        run: flutter pub get
+        
+      - name: Do Flutter tests
+        run: flutter test
+        
+      - name: Run repo lint check
+        uses: ValentinVignal/action-dart-analyze@v0.13
+        with:
+          fail-on: 'warning'
+          
+        
+      - name: Conventional Changelog Action
+        id: changelog
+        if: github.ref == 'refs/heads/master' && github.event_name == 'pull_request'
+        uses: TriPSs/conventional-changelog-action@v3
+        with:
+          github-token: ${{ secrets.GITSEARCH_ACTION_TOKEN }}
+          skip-on-empty: false
+
+  buildAndroid:
+    name: Building for android
+    needs: [flutterTests]
+    runs-on: ubuntu-latest
+
+    steps:        
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+
+      # Basic flutter commands
+      - name: Check Flutter version
+        run: flutter --version
+        
+      - name: Get project packages
+        run: flutter pub get
+        
+      #Android build
+      - name: Flutter build apk test
+        run: flutter build apk --release --split-per-abi
+        
+      - name: Flutter build appbundle
+        run: flutter build appbundle
+        
+      - name: Upload result apk
+        if: github.ref == 'refs/heads/master' && github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v3
+        with:
+          name: apk-build
+          path: build/app/outputs/apk/release
+          
+      - name: Upload app bundle
+        if: github.ref == 'refs/heads/master' && github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v3
+        with:
+          name: appbundle
+          path: build/app/outputs/bundle/release/app-release.aab
+         
+  buildIOS:
+    name: Building for IOS
+    needs: [flutterTests]
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+      
+      - name: Check Flutter version
+        run: flutter --version
+        
+      - name: Get project packages
+        run: flutter pub get
+        
+      #IOS build
+      - name: Flutter build IOS unsigned ipa
+        run: flutter build ios --release --no-codesign
+  
+  deployAndroid:
+    name: Create new release and upload files
+    needs: [flutterTests, buildAndroid]
+    if: github.ref == 'refs/heads/master' && github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download result apk
+        uses: actions/download-artifact@v3
+        with:
+          name: apk-build
+          
+      - name: Download result appbundle
+        uses: actions/download-artifact@v3
+        with:
+          name: appbundle
+          
+      - name: Create a Release APK
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "*.apk,*.aab"          
+          token: ${{ secrets.GITSEARCH_ACTION_TOKEN }}
+          tag: ${{ needs.flutterTests.outputs.tag }}
+          removeArtifacts: true
+          generateReleaseNotes: true
+          artifactErrorsFailBuild: true
