@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:gitsearch/Pages/history_page_tab.dart';
 import 'package:gitsearch/Pages/search_page_tab.dart';
+import 'package:gitsearch/app.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -40,6 +41,20 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin, Auto
     return Scaffold(
       appBar: AppBar(
         title: const Text('Search Page'),
+        actions: [
+          IconButton(
+            icon: Icon(
+              MyApp.themeNotifier.value == ThemeMode.light ? Icons.dark_mode : Icons.light_mode,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              MyApp.themeNotifier.value =
+                MyApp.themeNotifier.value == ThemeMode.light
+                    ? ThemeMode.dark
+                    : ThemeMode.light;
+            }
+          )
+        ],
       ),
       body: TabBarView(
         key: _tabviewKey,
@@ -50,19 +65,19 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin, Auto
         ]
       ),
       bottomNavigationBar: Container(
-        color: Theme.of(context).colorScheme.primary,
-        child: 
-          TabBar(
-            controller: _tabController,    
-            indicatorWeight: 5,
-            indicatorColor: Colors.white,
-            tabs: const <Widget>[
-              Tab(icon: Icon(Icons.search, size: 36)),
-              Tab(icon: Icon(Icons.history, size: 36)),
-            ],
-          )
-      )
+        color: Theme.of(context).bottomNavigationBarTheme.backgroundColor,
+        child: TabBar(
+          controller: _tabController,    
+          indicatorWeight: 5,
+          indicatorColor: Colors.white,
+          tabs: const <Widget>[
+            Tab(icon: Icon(Icons.search, size: 36)),
+            Tab(icon: Icon(Icons.history, size: 36)),
+          ],
+        )
+      ),      
     );
+    
   }
   
  

@@ -23,7 +23,7 @@ class SearchResultItemCard extends StatelessWidget {
           children: [
               ListTile(
                 leading: Hero(
-                  tag: item.name as String,
+                  tag: item.fullName as String,
                   child: CircleAvatar(
                     backgroundColor: Theme.of(context).colorScheme.primary,
                     child: CircleAvatar(

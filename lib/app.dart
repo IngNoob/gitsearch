@@ -8,35 +8,46 @@ import 'package:gitsearch/Pages/search_page_tab.dart';
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
+  // Default flutter change notifier, not neccesary to use the provider package for just one value
+  static final ValueNotifier<ThemeMode> themeNotifier = ValueNotifier(ThemeMode.light);
+
   @override
   Widget build(BuildContext context) {
 
-    return MaterialApp(
-      title: 'GitSearch',
-      theme:ThemeData.light().copyWith(
-        colorScheme: const ColorScheme.light().copyWith(primary: Colors.blueGrey)
-      ),
-      onGenerateRoute: (RouteSettings settings){
+    return ValueListenableBuilder<ThemeMode>(
+      valueListenable: themeNotifier,
+      builder: (_, ThemeMode currentMode, __) {
+        return  MaterialApp(
+          title: 'GitSearch',
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData.light().copyWith(
+            colorScheme: const ColorScheme.light().copyWith(primary: Colors.blueGrey),
+            bottomNavigationBarTheme: const BottomNavigationBarThemeData(backgroundColor: Colors.blueGrey)
+          ),
+          darkTheme: ThemeData.dark(),
+          themeMode: currentMode,
+          onGenerateRoute: (RouteSettings settings){
 
-        if (kDebugMode) {
-          print('Route: ${settings.name}');
-        }
+            if (kDebugMode) {
+              print('Route: ${settings.name}');
+            }
 
-        switch(settings.name){
-          case Routes.search:
-            return MaterialPageRoute<dynamic>(
-                builder: (_) => const SearchPageTab(),
-                settings: settings,
-              );
-          default:
-            return MaterialPageRoute<dynamic>(
-                builder: (_) => const HomePage(),
-                settings: settings,
-              );
-        }
+            switch(settings.name){
+              case Routes.search:
+                return MaterialPageRoute<dynamic>(
+                    builder: (_) => const SearchPageTab(),
+                    settings: settings,
+                  );
+              default:
+                return MaterialPageRoute<dynamic>(
+                    builder: (_) => const HomePage(),
+                    settings: settings,
+                  );
+            }
 
-      }        
-      
+          }      
+        );
+      }
     );
   }
 }
