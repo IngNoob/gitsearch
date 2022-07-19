@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:gitsearch/Common/globals.dart';
 import 'package:gitsearch/Items/search_query.dart';
 import 'package:gitsearch/Items/search_result.dart';
-import 'package:gitsearch/Items/search_result_item.dart';
 
 import 'package:http/http.dart' as http;
 

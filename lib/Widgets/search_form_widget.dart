@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gitsearch/Items/search_query.dart';
+import 'package:gitsearch/Models/history_model.dart';
 import 'package:gitsearch/Models/search_model.dart';
 import 'package:provider/provider.dart';
 
@@ -15,16 +16,19 @@ class _SearchFormWidgetState extends State<SearchFormWidget> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final SearchQuery searchData = SearchQuery();
   AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
-  TextEditingController keywordTextController = TextEditingController();
+  final TextEditingController _keywordTextController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+    if(searchData.keyword != null){
+      _keywordTextController.text = searchData.keyword!;
+    }
   }
 
   @override
   void dispose() {
-    keywordTextController.dispose();
+    _keywordTextController.dispose();
     super.dispose();
   }
 
@@ -42,7 +46,7 @@ class _SearchFormWidgetState extends State<SearchFormWidget> {
           child: Column( children: [
             TextFormField(
               maxLength: 20,
-              controller: keywordTextController,
+              controller: _keywordTextController,
               decoration: const InputDecoration(
                 hintText: 'Input search keyword'
               ),
@@ -80,6 +84,7 @@ class _SearchFormWidgetState extends State<SearchFormWidget> {
       _formKey.currentState!.save();
 
       Provider.of<SearchModel>(context, listen: false).doSearch(searchData.keyword);
+      Provider.of<HistoryModel>(context, listen: false).addToHistory(searchData.keyword);
       
     }
 
