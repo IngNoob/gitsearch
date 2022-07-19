@@ -46,7 +46,7 @@ jobs:
         
       - name: Conventional Changelog Action
         id: changelog
-        if: github.ref == 'refs/heads/master' && github.event.pull_request.merged == true
+        if: github.ref == 'refs/heads/master'
         uses: TriPSs/conventional-changelog-action@v3
         with:
           github-token: ${{ secrets.GITSEARCH_ACTION_TOKEN }}
@@ -76,14 +76,14 @@ jobs:
         run: flutter build appbundle
         
       - name: Upload result apk
-        if: github.ref == 'refs/heads/master' && github.event.pull_request.merged == true
+        if: github.ref == 'refs/heads/master'
         uses: actions/upload-artifact@v3
         with:
           name: apk-build
           path: build/app/outputs/apk/release
           
       - name: Upload app bundle
-        if: github.ref == 'refs/heads/master' && github.event.pull_request.merged == true
+        if: github.ref == 'refs/heads/master'
         uses: actions/upload-artifact@v3
         with:
           name: appbundle
@@ -110,7 +110,7 @@ jobs:
   deployAndroid:
     name: Create new release and upload files
     needs: [flutterTests, buildAndroid]
-    if: github.ref == 'refs/heads/master' && github.event.pull_request.merged == true
+    if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     permissions:
       contents: write
