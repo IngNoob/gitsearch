@@ -6,7 +6,7 @@ name: CICD
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches: [ "master", "github_actions" ]
+    branches: '*'
   pull_request:
     branches: [ "master" ]
 
@@ -18,7 +18,7 @@ jobs:
 
   # This workflow contains multiple jobs
   flutterTests:
-    name: Runs basic flutter tests
+    name: Runs flutter tests
     runs-on: ubuntu-latest
     outputs:
       tag: ${{ steps.changelog.outputs.tag }}
@@ -53,7 +53,7 @@ jobs:
           skip-on-empty: false
 
   buildAndroid:
-    name: Runs test build for android
+    name: Building for android
     needs: [flutterTests]
     runs-on: ubuntu-latest
 
@@ -80,9 +80,15 @@ jobs:
         with:
           name: apk-build
           path: build/app/outputs/apk/release
+          
+      - name: Upload app bundle
+        uses: actions/upload-artifact@v3
+        with:
+          name: appbundle
+          path: build/app/outputs/bundle/release/app-release.aab
          
   buildIOS:
-    name: Runs test build for IOS
+    name: Building for IOS
     needs: [flutterTests]
     runs-on: macos-latest
     steps:
@@ -100,8 +106,9 @@ jobs:
         run: flutter build ios --release --no-codesign
   
   deployAndroid:
-    name: Create new release and upload apk files
+    name: Create new release and upload files
     needs: [flutterTests, buildAndroid]
+    if: github.ref == 'refs/heads/master' && github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -111,10 +118,15 @@ jobs:
         with:
           name: apk-build
           
+      - name: Download result appbundle
+        uses: actions/download-artifact@v3
+        with:
+          name: appbundle
+          
       - name: Create a Release APK
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "*.apk"          
+          artifacts: "*.apk,*.aab"          
           token: ${{ secrets.GITSEARCH_ACTION_TOKEN }}
           tag: ${{ needs.flutterTests.outputs.tag }}
           removeArtifacts: true
