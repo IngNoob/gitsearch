@@ -41,6 +41,25 @@ dependencies:
   sqflite: ^2.0.3
   modal_progress_hud_nsn: ^0.2.1
 
+  flutter_native_splash: ^2.2.5
+
+# Command: flutter pub run flutter_launcher_icons:main
+# only for iOS settings, in Android the background ends up being white
+flutter_icons:
+  android: "ic_launcher"
+  ios: true
+  image_path: "assets/app_icon.png"
+  adaptive_icon_background: "#607D8B"
+
+# Command: flutter pub run flutter_native_splash:create
+flutter_native_splash:
+  color: "#607D8B"
+  image: assets/splash_icon.png
+
+  android_12:
+    color: "#607D8B"
+    image: assets/splash_icon.png
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
