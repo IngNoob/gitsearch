@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:gitsearch/app.dart';
 import 'package:gitsearch/Widgets/drop_language_locale.dart';
 
+
 class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
   const CustomAppBar({Key? key}) : super(key: key);
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+
 
   @override
   Widget build(BuildContext context) {
@@ -58,17 +60,34 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
         
       ),
       actions: [
-        IconButton(
-          icon: Icon(
-            MyApp.themeNotifier.value == ThemeMode.light ? Icons.dark_mode : Icons.light_mode,
-            color: Colors.white,
-          ),
-          onPressed: () {
-            MyApp.themeNotifier.value = MyApp.themeNotifier.value == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
-          }
+        PopupMenuButton(
+          icon: const Icon(Icons.settings),
+          itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+            // Dark mode
+            PopupMenuItem(
+              child: Center(
+                child: Icon(
+                  MyApp.themeNotifier.value == ThemeMode.light ? Icons.dark_mode : Icons.light_mode,
+                  color: MyApp.themeNotifier.value == ThemeMode.light ? 
+                    Theme.of(context).colorScheme.primary : null,
+                )
+              ),
+              onTap:  () {
+                MyApp.themeNotifier.value = MyApp.themeNotifier.value == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
+                //Navigator.pop(context);
+              },
+            ),
+            // Language change
+            const PopupMenuItem(
+              child: Center(
+                child: DropLanguageLocale()
+              ),
+            ),
+
+          ]
         )
       ],
-      leading: DropLanguageLocale(),
     );
   }
+
 }

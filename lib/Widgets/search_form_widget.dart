@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gitsearch/Items/search_query.dart';
 import 'package:gitsearch/Models/history_model.dart';
@@ -47,12 +48,12 @@ class _SearchFormWidgetState extends State<SearchFormWidget> {
             TextFormField(
               maxLength: 20,
               controller: _keywordTextController,
-              decoration: const InputDecoration(
-                hintText: 'Input search keyword'
+              decoration: InputDecoration(
+                hintText: 'inputHint'.tr()
               ),
               validator: (String? value){
                   if (value!.isEmpty){
-                  return "Required Field";
+                  return 'requiredHint'.tr();
                 }
                   return null;
               },
@@ -62,7 +63,7 @@ class _SearchFormWidgetState extends State<SearchFormWidget> {
             ),
             ElevatedButton.icon(
               icon: const Icon(Icons.search), 
-              label: const Text("Search Repo"),
+              label: Text('searchBtn'.tr()),
               onPressed: doSearch, 
             )
             

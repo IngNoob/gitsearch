@@ -5,7 +5,6 @@ import 'package:gitsearch/Models/search_model.dart';
 import 'package:gitsearch/Widgets/search_form_widget.dart';
 import 'package:gitsearch/Widgets/search_result_item_card.dart';
 import 'package:gitsearch/app.dart';
-import 'package:intl/intl.dart';
 
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
@@ -59,8 +58,6 @@ class _SearchPageTabState extends State<SearchPageTab> with AutomaticKeepAliveCl
           children: [
 
             SearchFormWidget(key: _formWidgetKey),
-
-            Text('testMsg'.tr()),
 
             Expanded(
               child: Consumer<SearchModel>(
@@ -154,7 +151,7 @@ class _SearchPageTabState extends State<SearchPageTab> with AutomaticKeepAliveCl
           Container(
             alignment: Alignment.centerRight,
             child: Text(
-              "${NumberFormat.compact().format(sModel.searchResult.totalCount ?? 0)} repositories", 
+              'resultCount'.tr(args: [NumberFormat.compact().format(sModel.searchResult.totalCount ?? 0)]), 
               style: TextStyle(
                 fontWeight: FontWeight.bold, 
                 color: MyApp.themeNotifier.value == ThemeMode.light ? 

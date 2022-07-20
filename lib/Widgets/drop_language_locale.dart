@@ -8,7 +8,7 @@ class DropLanguageLocale extends StatefulWidget {
   const DropLanguageLocale({Key? key}) : super(key: key);
   
   @override
-  _DropLanguageLocaleState createState() => _DropLanguageLocaleState();
+  State<DropLanguageLocale> createState() => _DropLanguageLocaleState();
 }
 
 class _DropLanguageLocaleState extends State<DropLanguageLocale> {
@@ -16,18 +16,19 @@ class _DropLanguageLocaleState extends State<DropLanguageLocale> {
   @override
   Widget build(BuildContext context) {
 
-
-    return DropdownButtonHideUnderline(
-      child: DropdownButton<Locale>(
-        value: context.locale,
-        items: context.supportedLocales.map(( Locale locale) => DropdownMenuItem<Locale>( 
-          value: locale, 
-          child:Text(locale.languageCode, style: const TextStyle(fontSize: 11.0)),   
-        )).toList(),
-        onChanged: (Locale? newLocale) async{
-          await context.setLocale(Locale(newLocale!.languageCode, newLocale.countryCode));
-                
-        }
+    return Center(
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<Locale>(
+          value: context.locale,
+          items: context.supportedLocales.map(( Locale locale) => DropdownMenuItem<Locale>( 
+            value: locale, 
+            child:Text(locale.languageCode, style: const TextStyle(fontSize: 11.0)),   
+          )).toList(),
+          onChanged: (Locale? newLocale) async{
+            await context.setLocale(Locale(newLocale!.languageCode, newLocale.countryCode));
+                  
+          }
+        )
       )
     );
   }
