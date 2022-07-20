@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gitsearch/app.dart';
+import 'package:gitsearch/Widgets/drop_language_locale.dart';
 
 class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
   const CustomAppBar({Key? key}) : super(key: key);
@@ -67,6 +68,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
           }
         )
       ],
+      leading: DropLanguageLocale(),
     );
   }
 }

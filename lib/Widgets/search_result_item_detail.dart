@@ -245,10 +245,10 @@ class _SearchResultItemDetailState extends State<SearchResultItemDetail> {
 
  Future<void> openBrowser(String url) async {
   
-  final Uri _url = Uri.parse(url);
+  final Uri uri = Uri.parse(url);
 
-  if (!await launchUrl(_url)) {
-    throw 'Could not launch $_url';
+  if (!await launchUrl(uri)) {
+    throw 'Could not launch $url';
   }
 
  }

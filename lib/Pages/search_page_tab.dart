@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gitsearch/Items/search_result.dart';
 import 'package:gitsearch/Models/search_model.dart';
@@ -58,6 +59,8 @@ class _SearchPageTabState extends State<SearchPageTab> with AutomaticKeepAliveCl
           children: [
 
             SearchFormWidget(key: _formWidgetKey),
+
+            Text('testMsg'.tr()),
 
             Expanded(
               child: Consumer<SearchModel>(

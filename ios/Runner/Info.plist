@@ -12,6 +12,11 @@
 		<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 		<key>CFBundleInfoDictionaryVersion</key>
 		<string>6.0</string>
+		<key>CFBundleLocalizations</key>
+		<array>
+			<string>jp</string>
+			<string>en</string>
+		</array>
 		<key>CFBundleName</key>
 		<string>gitsearch</string>
 		<key>CFBundlePackageType</key>
