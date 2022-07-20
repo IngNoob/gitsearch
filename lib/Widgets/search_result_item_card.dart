@@ -15,41 +15,38 @@ class SearchResultItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Center(
       child: Card(
         margin: const EdgeInsets.all(8),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-              ListTile(
-                leading: Hero(
-                  tag: item.fullName as String,
-                  child: CircleAvatar(
-                    backgroundColor: Theme.of(context).colorScheme.primary,
-                    child: CircleAvatar(
-                      backgroundColor: Theme.of(context).colorScheme.primary,
-                      backgroundImage: item.owner!.avatarUrl != null ? NetworkImage(item.owner!.avatarUrl as String): null,
-                      child: item.owner!.avatarUrl == null ? const Icon(Icons.person, color: Colors.white) : null
-                    ),
-                  )
+        child: 
+          ListTile(
+            leading: Hero(
+              tag: item.fullName as String,
+              child: CircleAvatar(
+                backgroundColor: Theme.of(context).colorScheme.primary,
+                child: CircleAvatar(
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  backgroundImage: item.owner!.avatarUrl != null ? NetworkImage(item.owner!.avatarUrl as String): null,
+                  child: item.owner!.avatarUrl == null ? const Icon(Icons.person, color: Colors.white) : null
                 ),
-                title: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.all(8),
-                      child:  Icon(Icons.book)
-                    ),
-                    Expanded(child:
-                      Text(item.name ?? "***Error***", overflow: TextOverflow.clip,)
-                    ),
-                  ],
-                ),
-                trailing: const Icon(Icons.add),
-                onTap: () => showDetail(context),
               )
-            ]
-        ),
+            ),
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.all(8),
+                  child:  Icon(Icons.book)
+                ),
+                Expanded(child:
+                  Text(item.name ?? "***Error***", overflow: TextOverflow.clip,)
+                ),
+              ],
+            ),
+            trailing: const Icon(Icons.add),
+            onTap: () => showDetail(context),
+          )
       )
     );
   }

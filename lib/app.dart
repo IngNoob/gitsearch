@@ -23,8 +23,11 @@ class MyApp extends StatelessWidget {
           theme: ThemeData.light().copyWith(
             colorScheme: const ColorScheme.light().copyWith(primary: Colors.blueGrey),
             bottomNavigationBarTheme: const BottomNavigationBarThemeData(backgroundColor: Colors.blueGrey)
+          ),          
+          darkTheme: ThemeData.dark().copyWith(
+            colorScheme: const ColorScheme.light().copyWith(primary: const Color(0xFF424242)),
+            bottomNavigationBarTheme: const BottomNavigationBarThemeData(backgroundColor: Color(0xFF424242))
           ),
-          darkTheme: ThemeData.dark(),
           themeMode: currentMode,
           onGenerateRoute: (RouteSettings settings){
 
@@ -33,6 +36,11 @@ class MyApp extends StatelessWidget {
             }
 
             switch(settings.name){
+              case Routes.home:
+                return MaterialPageRoute<dynamic>(
+                    builder: (_) => const HomePage(),
+                    settings: settings,
+                  );
               case Routes.search:
                 return MaterialPageRoute<dynamic>(
                     builder: (_) => const SearchPageTab(),

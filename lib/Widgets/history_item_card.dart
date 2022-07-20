@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gitsearch/Items/history_item.dart';
 import 'package:gitsearch/Models/history_model.dart';
 import 'package:gitsearch/Models/search_model.dart';
+import 'package:gitsearch/app.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -29,7 +30,9 @@ class HistoryItemCard extends StatelessWidget {
                 leading: Container(
                   padding: const EdgeInsets.all(4),
                   decoration: ShapeDecoration(
-                    color: Theme.of(context).colorScheme.primary,
+                    color: MyApp.themeNotifier.value == ThemeMode.light ? 
+                      Theme.of(context).colorScheme.primary 
+                      : Theme.of(context).backgroundColor, 
                     shape: RoundedRectangleBorder( borderRadius: BorderRadius.circular(4)),
                   ),
                   child: Text(
@@ -47,7 +50,6 @@ class HistoryItemCard extends StatelessWidget {
                         style: const TextStyle( fontWeight: FontWeight.bold)
                       )
                     ),
-                    const Spacer(),
                     IconButton(onPressed: () => doSearch(context), icon: const Icon(Icons.replay)),                  
                     IconButton(onPressed: () => deleteHistory(context), icon: const Icon(Icons.delete)),                
                   ],
