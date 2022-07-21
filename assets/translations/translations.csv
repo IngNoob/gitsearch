@@ -1,0 +1,5 @@
+str,ja_JP,en
+inputHint,検索キーワードを入力,Input search keyword
+requiredHint,入力必要です,Required field
+searchBtn,リポジトリを検索する,Search repo
+resultCount,{}件リポジトリ,{} repositories

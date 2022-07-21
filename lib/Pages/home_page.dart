@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:gitsearch/Pages/history_page_tab.dart';
 import 'package:gitsearch/Pages/search_page_tab.dart';
-import 'package:gitsearch/app.dart';
+import 'package:gitsearch/Widgets/custom_app_bar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -39,23 +39,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin, Auto
     super.build(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Search Page'),
-        actions: [
-          IconButton(
-            icon: Icon(
-              MyApp.themeNotifier.value == ThemeMode.light ? Icons.dark_mode : Icons.light_mode,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              MyApp.themeNotifier.value =
-                MyApp.themeNotifier.value == ThemeMode.light
-                    ? ThemeMode.dark
-                    : ThemeMode.light;
-            }
-          )
-        ],
-      ),
+      appBar: const CustomAppBar(),
       body: TabBarView(
         key: _tabviewKey,
         controller: _tabController,

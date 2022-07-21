@@ -1,9 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gitsearch/Items/search_result.dart';
 import 'package:gitsearch/Models/search_model.dart';
 import 'package:gitsearch/Widgets/search_form_widget.dart';
 import 'package:gitsearch/Widgets/search_result_item_card.dart';
-import 'package:intl/intl.dart';
+import 'package:gitsearch/app.dart';
 
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
@@ -50,9 +51,6 @@ class _SearchPageTabState extends State<SearchPageTab> with AutomaticKeepAliveCl
     final Size screenSize = MediaQuery.of(context).size;
 
     return Scaffold(
-      // appBar: AppBar(
-      //   title: const Text('Search Page'),
-      // ),
       body: ModalProgressHUD(
         inAsyncCall: Provider.of<SearchModel>(context).isBusy,
         progressIndicator: CircularProgressIndicator(color: Theme.of(context).colorScheme.primary),
@@ -139,7 +137,7 @@ class _SearchPageTabState extends State<SearchPageTab> with AutomaticKeepAliveCl
       child: Row(
         children: [
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
+            padding: const EdgeInsets.all(4),
             decoration: ShapeDecoration(
               color: Theme.of(context).colorScheme.primary,
               shape: RoundedRectangleBorder( borderRadius: BorderRadius.circular(4)),
@@ -153,8 +151,13 @@ class _SearchPageTabState extends State<SearchPageTab> with AutomaticKeepAliveCl
           Container(
             alignment: Alignment.centerRight,
             child: Text(
-              "${NumberFormat.compact().format(sModel.searchResult.totalCount ?? 0)} repositories", 
-              style: TextStyle(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.primary)
+              'resultCount'.tr(args: [NumberFormat.compact().format(sModel.searchResult.totalCount ?? 0)]), 
+              style: TextStyle(
+                fontWeight: FontWeight.bold, 
+                color: MyApp.themeNotifier.value == ThemeMode.light ? 
+                  Theme.of(context).colorScheme.primary 
+                  : null //Default value as it is not being overriden
+              )
             )
           )
         ],
