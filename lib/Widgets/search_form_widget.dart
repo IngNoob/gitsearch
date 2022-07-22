@@ -81,6 +81,7 @@ class _SearchFormWidgetState extends State<SearchFormWidget> {
                 Padding(
                   padding: const EdgeInsets.all(8),
                   child: ElevatedButton.icon(
+                    key: const Key('searchBtn'),
                     icon: const Icon(Icons.search), 
                     label: Text('searchBtn'.tr()),
                     onPressed: doSearch, 

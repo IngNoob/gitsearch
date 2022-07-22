@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
 
         rebuildAllChildren(context);
 
-        return  MaterialApp(
+        return MaterialApp(
           title: 'GitSearch',
           debugShowCheckedModeBanner: false,
           localizationsDelegates: context.localizationDelegates,

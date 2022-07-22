@@ -8,7 +8,7 @@ class SearchQuery {
   int perPage = Globals.apiPerPageDefault;
   int page = Globals.apiPageDefault;
 
-  SearchQuery({keyword, sort, order, perPage, page});
+  SearchQuery({this.keyword, sort, order, perPage, page});
 
   SearchQuery.fromJson(Map<String, dynamic> json) {
     keyword = json['q'];

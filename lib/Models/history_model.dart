@@ -1,8 +1,10 @@
 import 'dart:collection';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:gitsearch/Common/db_handler.dart';
+import 'package:gitsearch/Services/db_handler.dart';
 import 'package:gitsearch/Items/history_item.dart';
+import 'package:sqflite/sqlite_api.dart';
 
 class HistoryModel extends ChangeNotifier{
 
@@ -13,6 +15,12 @@ class HistoryModel extends ChangeNotifier{
 
   List<HistoryItem> _history = [];
   UnmodifiableListView<HistoryItem> get history => UnmodifiableListView(_history);
+
+  Future<void> debugOpen(Database db) async {
+    if (Platform.environment.containsKey('FLUTTER_TEST')){
+      _dbHandler.openTestDatabase(db);
+    }
+  }
 
   Future<void> openDb() async {
     await _dbHandler.initDatabase();
@@ -31,22 +39,9 @@ class HistoryModel extends ChangeNotifier{
 
   }
 
-  Future<void> getHistoryNext() async {
-
-    // _isBusy = true;
-    // notifyListeners();
-
-    
-
-    // _isBusy = false;
-    // notifyListeners();
-
-  }
-
   Future<List<HistoryItem>> _getHistories() async {
     return _dbHandler.getHistories();
   }
-
 
 
   Future<void> addToHistory(String? keyword) async {

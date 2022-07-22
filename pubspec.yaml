@@ -68,8 +68,15 @@ flutter_native_splash:
     image: assets/images/splash_icon.png
 
 dev_dependencies:
+  integration_test:
+    sdk: flutter
   flutter_test:
     sdk: flutter
+  # https://github.com/tekartik/sqflite/blob/master/sqflite_common_ffi/doc/testing.md
+  sqflite_common_ffi:
+  build_runner:
+  mockito: ^5.2.0
+  mocktail: ^0.3.0
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

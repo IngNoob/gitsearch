@@ -1,14 +1,19 @@
 import 'package:gitsearch/Common/globals.dart';
 import 'package:gitsearch/Models/search_model.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:gitsearch/Services/github_service.dart';
 
 
 void main() {
 
+  late SearchModel sModel;
+
+  setUp((){
+    sModel = SearchModel(GitHubService());
+  }); 
+
   group('Search(API) provider tests:', (){
     test('Default values should be null or preset', () {
-
-      final SearchModel sModel = SearchModel();
 
       // Start on res
       expect(sModel.isBusy, false);
@@ -20,8 +25,6 @@ void main() {
     });
     test('Trying sample search', () async {
 
-      final SearchModel sModel = SearchModel();
-
       // Search for own repository with own name, one single hit
       await sModel.doSearch('IngNoob/gitsearch');
 
@@ -31,7 +34,6 @@ void main() {
 
     test('Searching for next page', () async {
 
-      final SearchModel sModel = SearchModel();
 
       // Search for own repository with own name, one single hit
       await sModel.doSearch('google');
