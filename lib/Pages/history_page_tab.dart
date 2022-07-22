@@ -5,6 +5,7 @@ import 'package:gitsearch/Widgets/history_item_card.dart';
 
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 
 class HistoryPageTab extends StatefulWidget {
@@ -52,9 +53,6 @@ class _HistoryPageTabState extends State<HistoryPageTab> with AutomaticKeepAlive
     final Size screenSize = MediaQuery.of(context).size;
 
     return Scaffold(
-      // appBar: AppBar(
-      //   title: const Text('Search Page'),
-      // ),
       body: ModalProgressHUD(
         inAsyncCall: Provider.of<HistoryModel>(context).isBusy,
         progressIndicator: CircularProgressIndicator(color: Theme.of(context).colorScheme.primary),
@@ -75,7 +73,7 @@ class _HistoryPageTabState extends State<HistoryPageTab> with AutomaticKeepAlive
                   totalElements = hModel.history.length > elements.length ? elements.length+1 : elements.length;
                 
                   return elements.isEmpty ? 
-                    const Center(child: Text("Search history. Look up something to start")):
+                    Center(child: Text('welcomeHistory'.tr(), textAlign: TextAlign.center)):
                     ListView.builder(
                       key: _listViewKey,
                       controller: _listScrollCtrl,
@@ -86,7 +84,7 @@ class _HistoryPageTabState extends State<HistoryPageTab> with AutomaticKeepAlive
                             Container(
                               padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.2, vertical: 16),
                               child: OutlinedButton(
-                                child: const Text("Show more"),
+                                child: Text('more'.tr()),
                                 onPressed: () => Provider.of<HistoryModel>(context, listen: false).getHistoryNext(), 
                               )
                             )
@@ -95,7 +93,7 @@ class _HistoryPageTabState extends State<HistoryPageTab> with AutomaticKeepAlive
                             Center(
                               child: Container(
                                 padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.2, vertical: 16),
-                                child: const Text("Searching ...")
+                                child: Text('searching'.tr())
                               )
                             )
                           :

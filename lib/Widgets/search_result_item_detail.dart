@@ -1,4 +1,4 @@
-import 'package:intl/intl.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:gitsearch/Items/search_result_item.dart';
@@ -26,7 +26,7 @@ class _SearchResultItemDetailState extends State<SearchResultItemDetail> {
           children: [
 
             IconButton(
-              icon: Icon(Icons.close, 
+              icon: Icon(Icons.close, size: 30,
                 color: MyApp.themeNotifier.value == ThemeMode.light ? 
                   Theme.of(context).colorScheme.primary 
                   : Theme.of(context).backgroundColor
@@ -36,28 +36,32 @@ class _SearchResultItemDetailState extends State<SearchResultItemDetail> {
 
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Column( mainAxisSize: MainAxisSize.min,
+              child: Column( 
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   
                   Container(
-                    alignment: Alignment.centerLeft,
                     padding: const EdgeInsets.symmetric( vertical: 8),
                     child: Text(
                       widget.item.name ?? "***Error***", 
-                      style: Theme.of(context).textTheme.titleLarge)
+                      style: Theme.of(context).textTheme.titleLarge,
+                      textAlign: TextAlign.start
+                    )
                   ),
                   
                   Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      Row(children: [
-                          /*
+
+                      Row(mainAxisSize: MainAxisSize.min, children: [
+                        /*
                           リポジトリ名、オーナーアイコン、プロジェクト言語、Star 数、Watcher 数、Fork 数、Issue 数
                         */
+                        // User pic and name
                         Flexible(
-                          flex: 1,
                           child: Container(
-                            padding: const EdgeInsets.all(4),
+                            padding: const EdgeInsets.all(8),
                             decoration: ShapeDecoration(
                               color: MyApp.themeNotifier.value == ThemeMode.light ? 
                                 Theme.of(context).colorScheme.primary 
@@ -66,11 +70,12 @@ class _SearchResultItemDetailState extends State<SearchResultItemDetail> {
                             ),
                             child: Column(
                               children: [
+                                // User profile pic/avatar
                                 Hero(
                                   tag: widget.item.fullName as String,
                                   child: Container(
                                     child: widget.item.owner!.avatarUrl != null ?
-                                      Image.network(widget.item.owner!.avatarUrl as String) : 
+                                      Image.network(widget.item.owner!.avatarUrl as String, height: 100) : 
                                       CircleAvatar(
                                         radius: 50,
                                         backgroundColor: MyApp.themeNotifier.value == ThemeMode.light ? 
@@ -81,6 +86,7 @@ class _SearchResultItemDetailState extends State<SearchResultItemDetail> {
                                       
                                   )
                                 ),
+                                // User name
                                 Container(
                                   padding: const EdgeInsets.all(4),
                                   child: Text(
@@ -93,14 +99,16 @@ class _SearchResultItemDetailState extends State<SearchResultItemDetail> {
                           ),
                           )
                         ),
+                        
                         const SizedBox(width: 8),
+                        
+                        // Repo details
                         Flexible(
-                          flex: 2,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                                // Full name and language
-                              Row( mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              // Full name(repo) and language
+                              Row( mainAxisAlignment: MainAxisAlignment.spaceBetween, 
                                 children: [
                                   Flexible(
                                     child: Text(widget.item.fullName ?? "***Error***", overflow: TextOverflow.clip,)
@@ -119,19 +127,19 @@ class _SearchResultItemDetailState extends State<SearchResultItemDetail> {
                                   )
                                 ],
                               ),
-                                const SizedBox(height: 16),
+                              const SizedBox(height: 16),
                               
                               // Stars and watching
-                              Row( mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              Row( mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                    Flexible(
+                                  Flexible(
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                                       children: [
                                         Icon(Icons.star_border, color: Theme.of(context).colorScheme.primary ),
                                         Flexible(
                                           child: Text(widget.item.stargazersCount != null ? 
-                                            "${NumberFormat.compact().format(widget.item.stargazersCount)}\nstars" : "***Error***", 
+                                            'stars'.tr(args: [NumberFormat.compact().format(widget.item.stargazersCount)]) : "***Error***", 
                                             overflow: TextOverflow.clip,
                                             textAlign: TextAlign.center,
                                           )
@@ -146,7 +154,7 @@ class _SearchResultItemDetailState extends State<SearchResultItemDetail> {
                                         Icon(Icons.remove_red_eye_outlined, color: Theme.of(context).colorScheme.primary ),
                                         Flexible(
                                           child: Text(widget.item.watchersCount != null ? 
-                                            "${NumberFormat.compact().format(widget.item.watchersCount)}\nwatching" : "***Error***", 
+                                            'watching'.tr(args: [NumberFormat.compact().format(widget.item.watchersCount)]) : "***Error***", 
                                             overflow: TextOverflow.clip,
                                             textAlign: TextAlign.center,
                                           )
@@ -169,8 +177,8 @@ class _SearchResultItemDetailState extends State<SearchResultItemDetail> {
                                       children: [
                                         Icon(Icons.fork_right_outlined, color: Theme.of(context).colorScheme.primary ),
                                         Flexible(
-                                          child: Text(widget.item.forksCount != null ?  
-                                            "${NumberFormat.compact().format(widget.item.forksCount)}\nforks" : "***Error***", 
+                                          child: Text(widget.item.forksCount != null ?
+                                            'forks'.tr(args: [NumberFormat.compact().format(widget.item.forksCount)]) : "***Error***", 
                                             overflow: TextOverflow.clip,
                                             textAlign: TextAlign.center,
                                           )
@@ -185,7 +193,7 @@ class _SearchResultItemDetailState extends State<SearchResultItemDetail> {
                                         Icon(Icons.adjust_outlined, color: Theme.of(context).colorScheme.primary ),
                                         Flexible(
                                           child: Text(widget.item.openIssuesCount != null ? 
-                                            "${NumberFormat.compact().format(widget.item.openIssuesCount)}\nissues" : "***Error***", 
+                                            'issues'.tr(args: [NumberFormat.compact().format(widget.item.openIssuesCount)]) : "***Error***", 
                                             overflow: TextOverflow.clip,
                                             textAlign: TextAlign.center,
                                           )
@@ -202,33 +210,42 @@ class _SearchResultItemDetailState extends State<SearchResultItemDetail> {
                         )
                       
                       ]),
+                      
                       const SizedBox(height: 16),
-                      Row(mainAxisAlignment: MainAxisAlignment.end,
+
+                      Row(mainAxisSize: MainAxisSize.min,
                         children: [
-                          ElevatedButton.icon(
-                            icon: const Icon(Icons.archive), 
-                            label: const Text("Browse Repo"),
-                            style: ElevatedButton.styleFrom(
-                              primary: MyApp.themeNotifier.value == ThemeMode.light ? 
-                                Theme.of(context).colorScheme.primary 
-                                : Theme.of(context).backgroundColor
-                            ),
-                            onPressed: () => openBrowser(widget.item.htmlUrl ?? ''),  
+                          Container(
+                            padding: const EdgeInsets.symmetric( horizontal: 8),
+                            child: ElevatedButton.icon(
+                              icon: const Icon(Icons.archive), 
+                              label: Text('repoCheck'.tr()),
+                              style: ElevatedButton.styleFrom(
+                                primary: MyApp.themeNotifier.value == ThemeMode.light ? 
+                                  Theme.of(context).colorScheme.primary 
+                                  : Theme.of(context).backgroundColor
+                              ),
+                              onPressed: () => openBrowser(widget.item.htmlUrl ?? ''),  
+                            )
                           ),
-                          const SizedBox(width: 8),
-                          ElevatedButton.icon(
-                            icon: const Icon(Icons.person), 
-                            label: const Text("Browse user"),
-                            style: ElevatedButton.styleFrom(
-                              primary: MyApp.themeNotifier.value == ThemeMode.light ? 
-                                Theme.of(context).colorScheme.primary 
-                                : Theme.of(context).backgroundColor
-                            ),
-                            onPressed: () => openBrowser(widget.item.owner?.htmlUrl  ?? ''), 
+
+                          Container(
+                            padding: const EdgeInsets.symmetric( horizontal: 8),
+                            child: ElevatedButton.icon(
+                              icon: const Icon(Icons.person), 
+                              label: Text('profileCheck'.tr()),
+                              style: ElevatedButton.styleFrom(
+                                primary: MyApp.themeNotifier.value == ThemeMode.light ? 
+                                  Theme.of(context).colorScheme.primary 
+                                  : Theme.of(context).backgroundColor
+                              ),
+                              onPressed: () => openBrowser(widget.item.owner?.htmlUrl  ?? ''), 
+                            )
                           ),
+
                         ],
                       )
-                      
+                                            
                     ],
                   )
                 ],
@@ -241,7 +258,7 @@ class _SearchResultItemDetailState extends State<SearchResultItemDetail> {
       )
     );
   }
-
+  
 
  Future<void> openBrowser(String url) async {
   

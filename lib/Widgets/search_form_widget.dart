@@ -37,37 +37,57 @@ class _SearchFormWidgetState extends State<SearchFormWidget> {
   Widget build(BuildContext context) {
 
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       color:Theme.of(context).scaffoldBackgroundColor,
-      child: GestureDetector(
+      child: 
+      GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: Form(
           key: _formKey,
           autovalidateMode: _autovalidateMode,
-          child: Column( children: [
-            TextFormField(
-              maxLength: 20,
-              controller: _keywordTextController,
-              decoration: InputDecoration(
-                hintText: 'inputHint'.tr()
-              ),
-              validator: (String? value){
-                  if (value!.isEmpty){
-                  return 'requiredHint'.tr();
-                }
-                  return null;
-              },
-              onSaved: (String? value){
-                searchData.keyword = value;
-              },    
-            ),
-            ElevatedButton.icon(
-              icon: const Icon(Icons.search), 
-              label: Text('searchBtn'.tr()),
-              onPressed: doSearch, 
-            )
-            
-          ])
+          child: Wrap( 
+            direction: Axis.horizontal,
+            alignment: WrapAlignment.spaceEvenly,
+            children: [
+                SizedBox(width: 500,
+                  child: TextFormField(
+                    maxLength: 20,
+                    controller: _keywordTextController,
+                    decoration: InputDecoration(
+                      hintText: 'inputHint'.tr()
+                    ),
+                    validator: (String? value){
+                        if (value!.isEmpty){
+                        return 'requiredHint'.tr();
+                      }
+                        return null;
+                    },
+                    buildCounter: (
+                      BuildContext context, {
+                      required int currentLength, 
+                      required bool isFocused, 
+                      required int? maxLength
+                    }) {
+                      // No build counter needed
+                      return null;
+                    },
+                    onSaved: (String? value){
+                      searchData.keyword = value;
+                    },    
+                    
+                ) 
+                ),
+
+                Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: ElevatedButton.icon(
+                    icon: const Icon(Icons.search), 
+                    label: Text('searchBtn'.tr()),
+                    onPressed: doSearch, 
+                  )
+                )
+            ]
+          )
         )
       )
     );

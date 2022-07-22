@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:gitsearch/Items/search_result.dart';
 import 'package:gitsearch/Models/search_model.dart';
 import 'package:gitsearch/Widgets/search_form_widget.dart';
@@ -59,25 +60,24 @@ class _SearchPageTabState extends State<SearchPageTab> with AutomaticKeepAliveCl
 
             SearchFormWidget(key: _formWidgetKey),
 
-            Expanded(
+            Flexible(
               child: Consumer<SearchModel>(
                 builder: (context, sModel, child) {
                   final SearchResult search = sModel.searchResult;
 
                   if (search.items != null) {
-                    // if (sModel.queryParams.page == 1 && _listScrollCtrl.positions.isNotEmpty) {
-                    //   _listScrollCtrl.animateTo(_listScrollCtrl.position.minScrollExtent, duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
-                    // }
                     elements= List.generate(search.items?.length ?? 0, (index) => SearchResultItemCard(search.items![index]));
                   }
 
-                  int totalElements = 0;
+                  bool moreFlag = false;
                   if (sModel.searchResult.totalCount != null){
-                    totalElements = sModel.searchResult.totalCount! > elements.length ? elements.length + 1 : elements.length;
+                    moreFlag = sModel.searchResult.totalCount! > elements.length;
                   } 
+
+                  final Color outlineColor = MyApp.themeNotifier.value == ThemeMode.light ? Theme.of(context).colorScheme.primary : Colors.white;
                 
                   return elements.isEmpty ? 
-                    const Center(child: Text("Welcome, press the search button to start")):
+                    Center(child: Text('welcomeSearch'.tr(), textAlign: TextAlign.center)):
                     Column(
                       children: [
                         // Searched keyword, total results
@@ -86,34 +86,51 @@ class _SearchPageTabState extends State<SearchPageTab> with AutomaticKeepAliveCl
                           padding: const EdgeInsets.symmetric(horizontal: 8), 
                           child: Divider(color: Theme.of(context).colorScheme.primary, thickness: 2,)
                         ),
-                        Expanded(
-                          child: ListView.builder(
-                            key: _listViewKey,
-                            controller: _listScrollCtrl,
-                            itemCount: totalElements,
-                            itemBuilder: (context, index){
-                              return (index == elements.length && elements.length != search.totalCount) ?
-                                (!sModel.isBusy) ?
-                                  Container(
-                                    padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.2, vertical: 16),
-                                    child: OutlinedButton(
-                                      child: const Text("Show more"),
-                                      onPressed: () => Provider.of<SearchModel>(context, listen: false).searchNext(), 
-                                    )
-                                  )
-                                  :
+
+                        Expanded( 
+                          child: ListView(
+                            children: [
+                              // Can't use orientation builder here cause it gives the orientation of the
+                              // parent widget, which in listview's case is alway vertical
+                              // https://stackoverflow.com/questions/50757851/orientation-builder-gives-wrong-orientation
+                              AlignedGridView.count(
+                                key: _listViewKey,
+                                controller: _listScrollCtrl,
+                                crossAxisCount: MediaQuery.of(context).orientation == Orientation.portrait ? 1 : 3,
+                                mainAxisSpacing: 4,
+                                crossAxisSpacing: 4,
+                                shrinkWrap: true,
+                                physics: const ScrollPhysics(),             
+                                itemCount: elements.length,
+                                  itemBuilder: (BuildContext context, int index) {
+                                    return elements[index];
+                                  }
+                                ),
                                   
-                                  Center(
-                                    child: Container(
-                                      padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.2, vertical: 16),
-                                      child: const Text("Searching ...")
-                                    )
+                              
+                              (!sModel.isBusy && moreFlag) ?                                                                      
+                                Container(
+                                  padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.2, vertical: 16),
+                                  child: OutlinedButton(
+                                    style: OutlinedButton.styleFrom(
+                                      primary:  outlineColor,
+                                      side: BorderSide(color: outlineColor)
+                                    ),
+                                    child: Text('more'.tr()),
+                                    onPressed: () => Provider.of<SearchModel>(context, listen: false).searchNext(), 
                                   )
+                                )
                                 :
-                                elements[index];
-                            }
+                                Center(
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.2, vertical: 16),
+                                    child: Text('searching'.tr())
+                                  )
+                                )
+                            ],
                           )
-                        )
+                        ),
+
                       ],
                     );
                                 

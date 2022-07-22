@@ -22,13 +22,13 @@ class HistoryItemCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Card(
-        margin: const EdgeInsets.all(8),
+        margin: const EdgeInsets.all(4),
         child: Column( 
           mainAxisSize: MainAxisSize.min,
           children: [
               ListTile(
                 leading: Container(
-                  padding: const EdgeInsets.all(4),
+                  padding: const EdgeInsets.all(8),
                   decoration: ShapeDecoration(
                     color: MyApp.themeNotifier.value == ThemeMode.light ? 
                       Theme.of(context).colorScheme.primary 
