@@ -108,7 +108,7 @@ class _SearchPageTabState extends State<SearchPageTab> with AutomaticKeepAliveCl
                                 ),
                                   
                               
-                              (!sModel.isBusy && moreFlag) ?                                                                      
+                              if (!sModel.isBusy && moreFlag)                                                                     
                                 Container(
                                   padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.2, vertical: 16),
                                   child: OutlinedButton(
@@ -119,8 +119,9 @@ class _SearchPageTabState extends State<SearchPageTab> with AutomaticKeepAliveCl
                                     child: Text('more'.tr()),
                                     onPressed: () => Provider.of<SearchModel>(context, listen: false).searchNext(), 
                                   )
-                                )
-                                :
+                                ),
+                                
+                              if (sModel.isBusy)
                                 Center(
                                   child: Container(
                                     padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.2, vertical: 16),
