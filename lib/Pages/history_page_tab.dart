@@ -79,25 +79,7 @@ class _HistoryPageTabState extends State<HistoryPageTab> with AutomaticKeepAlive
                       controller: _listScrollCtrl,
                       itemCount: totalElements,
                       itemBuilder: (context, index){
-                        return (index == elements.length && elements.length != history.length) ?
-                          (!hModel.isBusy) ?
-                            Container(
-                              padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.2, vertical: 16),
-                              child: OutlinedButton(
-                                child: Text('more'.tr()),
-                                onPressed: () => Provider.of<HistoryModel>(context, listen: false).getHistoryNext(), 
-                              )
-                            )
-                            :
-                            
-                            Center(
-                              child: Container(
-                                padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.2, vertical: 16),
-                                child: Text('searching'.tr())
-                              )
-                            )
-                          :
-                          elements[index];
+                        return elements[index];
                       }
 
                     );

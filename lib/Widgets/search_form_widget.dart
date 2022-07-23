@@ -81,6 +81,7 @@ class _SearchFormWidgetState extends State<SearchFormWidget> {
                 Padding(
                   padding: const EdgeInsets.all(8),
                   child: ElevatedButton.icon(
+                    key: const Key('searchBtn'),
                     icon: const Icon(Icons.search), 
                     label: Text('searchBtn'.tr()),
                     onPressed: doSearch, 
@@ -104,9 +105,11 @@ class _SearchFormWidgetState extends State<SearchFormWidget> {
     if(_formKey.currentState!.validate()){
       _formKey.currentState!.save();
 
-      Provider.of<SearchModel>(context, listen: false).doSearch(searchData.keyword);
-      Provider.of<HistoryModel>(context, listen: false).addToHistory(searchData.keyword);
-      
+      await Provider.of<SearchModel>(context, listen: false).doSearch(searchData.keyword).then((bool value){
+        if (value){
+          Provider.of<HistoryModel>(context, listen: false).addToHistory(searchData.keyword);
+        }
+      });
     }
 
   }

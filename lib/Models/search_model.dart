@@ -1,21 +1,32 @@
-import 'dart:convert';
 
+import 'dart:io';
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gitsearch/Common/globals.dart';
+import 'package:gitsearch/Common/utils.dart';
 import 'package:gitsearch/Items/search_query.dart';
 import 'package:gitsearch/Items/search_result.dart';
-
-import 'package:http/http.dart' as http;
-
+import 'package:gitsearch/Items/search_result_item.dart';
+import 'package:gitsearch/Services/github_service.dart';
 
 class SearchModel extends ChangeNotifier{
 
-  final String baseURL = "api.github.com";
-  final String searchEndPoint = "search/repositories";
+  SearchModel({
+    required this.gitService,
+    required this.exceptionCatcher
+  });
 
-  final Map<String, String> headers = <String, String>{
-    'Accept': ' application/vnd.github+json',
-  };
+  final GitHubService gitService;
+
+  // This is a callback to a function that is gonna deal with the 
+  // visual feedback to the user. We can leave it as an empty funcion
+  // so that there's no feedback to the user or change it for another one to
+  // choose different ways of how to provide said feedback
+  final OnExceptionCatch exceptionCatcher;
+
+
+  final List<String> _foundRepos = [];
 
   bool _isBusy = false;
   bool get isBusy => _isBusy;
@@ -26,58 +37,98 @@ class SearchModel extends ChangeNotifier{
   SearchResult _searchResult = SearchResult();
   SearchResult get searchResult => _searchResult;
 
+  Future<bool> doSearch(String? keyword) async {
 
-  Future<void> doSearch(String? keyword) async {
+    bool res = true;
 
     _isBusy = true;
     _searchResult = SearchResult();
+    _foundRepos.clear();
     notifyListeners();
 
-    _queryParams.keyword = keyword;
-    _queryParams.page = Globals.apiPageDefault;
-    _searchResult = await _search();
+    try{
 
+      _queryParams.keyword = keyword;
+      _queryParams.page = Globals.apiPageDefault;
+      _searchResult = await gitService.repoSearch(queryParams);
+      _searchResult.items = _filterRepos(_searchResult);
+
+    }catch(e){
+      res = false;
+      // In case an error pops up we clear the results and show a snackbar
+      // with a message for it.
+      _queryParams.reset();
+      _searchResult = SearchResult();
+      String msg = e.toString();
+      if (e.runtimeType != HttpException){
+        msg = 'errorGeneric'.tr(args: [msg]);
+      }
+      exceptionCatcher(msg);
+    }
     _isBusy = false;
     notifyListeners();
 
+    return res;
   }
 
-  Future<void> searchNext() async {
+  Future<bool> searchNext() async {
+
+    bool res = true;
 
     _isBusy = true;
     notifyListeners();
 
-    _queryParams.page++;
-    final SearchResult res = await _search();
+    try{
+      _queryParams.page++;
+      final SearchResult res = await gitService.repoSearch(queryParams);
 
-    if(res.items != null){
-      _searchResult.items?.addAll(res.items!.toList());
+      res.items = _filterRepos(res);
+
+      if(res.items != null){
+        _searchResult.items?.addAll(res.items!.toList());
+      }
+
+    }catch(e){
+      res = false;
+      // In case an error pops up we clear the results and show a snackbar
+      // with a message for it.
+      _queryParams.reset();
+      _searchResult = SearchResult();
+
+      String msg = e.toString();
+      if (e.runtimeType != HttpException){
+        msg = 'errorGeneric'.tr(args: [msg]);
+      }
+
+      exceptionCatcher(msg);
     }
 
     _isBusy = false;
     notifyListeners();
 
+    return res;
   }
 
-  Future<SearchResult> _search() async {
+  List<SearchResultItem> _filterRepos(SearchResult res) {
 
-    final Uri uri = Uri.https(
-      baseURL,
-      searchEndPoint,
-      _queryParams.toApiMap()      
-    );
-    
-    final http.Response response = await http.get(
-      uri,
-      headers: headers,
-    );
+    // https://github.com/Giphy/GiphyAPI/issues/235
+    // Sometimes elements come in duplicate, due to recent updates or because
+    // there are achived versions with the same name. To avoid duplicates and unwanted errors, 
+    // we filter the list
+    // たまに同じレポ二回以上出てくるなので、同じもの何回表示しないように、またエラーがないため（HeroWidgetとか）
+    //　貰った検索結果をフィルタリングします
 
-    final String body = utf8.decode(response.bodyBytes);
+    final List<SearchResultItem> filteredItems = [];
+    if (res.items != null){
+      for(SearchResultItem item in res.items!){
+        if(!_foundRepos.contains(item.fullName)){
+          _foundRepos.add(item.fullName!);
+          filteredItems.add(item);
+        }
+      }
+    }
 
-    final Map<String, dynamic> jsonMap = jsonDecode(body);
-
-    return SearchResult.fromJson(jsonMap);
-
+    return filteredItems;
   }
 
 }

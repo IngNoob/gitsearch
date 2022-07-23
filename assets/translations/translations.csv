@@ -1,6 +1,6 @@
 str,ja_JP,en
-welcomeSearch,ようこそ！\nキーワードを入力してから検索ボタンを押してください,Welcome!\nType something and press search to start
-welcomeHistory,検索履歴ページです。何か検索出来ましたら、その後、ここにひょうじされます。, This is the search history.\nLook up something first and it'll show here later
+welcomeSearch,ようこそ！\nキーワードを入力してから\n検索ボタンを押してください,Welcome!\nType something and press search to start
+welcomeHistory,検索履歴ページです。\n何か検索出来ましたら、\nその後、記録がここに表示されます。, This is the search history.\nLook up something first and it'll show here later
 inputHint,検索キーワードを入力,Input search keyword
 requiredHint,入力必要です,Required field
 searchBtn,検索する,Search
@@ -13,3 +13,5 @@ forks,{}\nFork数,{}\nForks
 issues,{}\nIssue数,{}\nIssues
 profileCheck,ユーザー確認,Check profile
 repoCheck,リポジトリ確認,Check repo
+close,閉じる,Dismiss
+errorGeneric,エラー発生しました\n{},An error has ocurred\n{}

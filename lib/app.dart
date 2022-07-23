@@ -6,6 +6,9 @@ import 'package:gitsearch/Pages/home_page.dart';
 import 'package:gitsearch/Common/routes.dart';
 import 'package:gitsearch/Pages/search_page_tab.dart';
 
+final GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
+
+
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -21,8 +24,9 @@ class MyApp extends StatelessWidget {
 
         rebuildAllChildren(context);
 
-        return  MaterialApp(
+        return MaterialApp(
           title: 'GitSearch',
+          navigatorKey: navKey,
           debugShowCheckedModeBanner: false,
           localizationsDelegates: context.localizationDelegates,
           supportedLocales: context.supportedLocales,
