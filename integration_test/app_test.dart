@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -11,7 +12,7 @@ void main() {
 group('Integration tests', () {
   testWidgets('Do search', (tester) async {
     app.main();
-    await tester.pumpAndSettle(Duration(seconds: 5));
+    await tester.pumpAndSettle(const Duration(seconds: 5));
     
     //Start the application and try
     expect(find.byType(TextFormField), findsOneWidget);
@@ -28,8 +29,27 @@ group('Integration tests', () {
     // Check that the button was pressed and the result widget was drawn
     expect(find.byType(SearchResultItemCard), findsOneWidget);
 
-    await tester.pumpAndSettle(Duration(seconds: 5));
+    await tester.pumpAndSettle(const Duration(seconds: 5));
 
+    });
+    testWidgets('Tab change', (tester) async {
+
+      app.main();
+      await tester.pumpAndSettle(const Duration(seconds: 5));
+
+      // On the page
+      expect(find.text('welcomeSearch'.tr()), findsOneWidget);
+
+      // Find tabs and change
+      Finder tabs = find.byType(Tab);
+      expect(tabs, findsNWidgets(2));
+
+      await tester.tap(tabs.last);
+      await tester.pump(const Duration(seconds: 1));
+
+      // On the new page
+      expect(find.text('welcomeHistory'.tr()), findsOneWidget);
+    
     });
   });
 }

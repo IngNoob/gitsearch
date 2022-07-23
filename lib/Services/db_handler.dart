@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:gitsearch/Items/history_item.dart';
 
@@ -16,9 +15,7 @@ class DBHandler {
       _db = await openDatabase(_path!, version: _version, onCreate: onCreate);
     }
     catch(ex) { 
-      if (kDebugMode) {
-        print(ex);
-      }
+      rethrow;
     }
 
   }
@@ -90,6 +87,7 @@ class DBHandler {
 
 
   Future<List<HistoryItem>> getHistories() async {
+
 
     if (_db == null) {
       await initDatabase();

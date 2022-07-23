@@ -38,4 +38,12 @@ class SearchQuery {
     };
   }
 
+  void reset({String? newKeyword}){
+    keyword = newKeyword;
+    sort = 1;
+    order = 1;
+    perPage = Globals.apiPerPageDefault;
+    page = Globals.apiPageDefault;
+  }
+
 }

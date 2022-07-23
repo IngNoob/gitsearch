@@ -1,5 +1,6 @@
 import 'package:gitsearch/Models/history_model.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:gitsearch/Services/db_handler.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
@@ -11,7 +12,7 @@ void main() async {
   group('History(SQlite) provider tests:', (){
     test('Default values should be null or preset', () {
 
-      final HistoryModel hModel = HistoryModel();
+      final HistoryModel hModel = HistoryModel(dbHandler: DBHandler(), exceptionCatcher: (String errorMsg) {});
 
       // Start on res
       expect(hModel.isBusy, false);
@@ -30,7 +31,7 @@ void main() async {
 
       TestWidgetsFlutterBinding.ensureInitialized();
 
-      final HistoryModel hModel = HistoryModel();
+      final HistoryModel hModel = HistoryModel(dbHandler: DBHandler(), exceptionCatcher: (String errorMsg) {});
 
       //Database not opened/set up before operating
       //expect(() async => await hModel.getHistory(), throwsA(CastError()) );
@@ -63,7 +64,7 @@ void main() async {
 
       TestWidgetsFlutterBinding.ensureInitialized();
 
-      final HistoryModel hModel = HistoryModel();
+      final HistoryModel hModel = HistoryModel(dbHandler: DBHandler(), exceptionCatcher: (String errorMsg) {});
 
       var db = await databaseFactoryFfi.openDatabase("gitsearchdb_ffi", 
         options: OpenDatabaseOptions(

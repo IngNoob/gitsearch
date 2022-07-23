@@ -1,6 +1,10 @@
 
+import 'dart:io';
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gitsearch/Common/globals.dart';
+import 'package:gitsearch/Common/utils.dart';
 import 'package:gitsearch/Items/search_query.dart';
 import 'package:gitsearch/Items/search_result.dart';
 import 'package:gitsearch/Items/search_result_item.dart';
@@ -8,9 +12,19 @@ import 'package:gitsearch/Services/github_service.dart';
 
 class SearchModel extends ChangeNotifier{
 
-  SearchModel(this._gitService);
+  SearchModel({
+    required this.gitService,
+    required this.exceptionCatcher
+  });
 
-  final GitHubService _gitService; 
+  final GitHubService gitService;
+
+  // This is a callback to a function that is gonna deal with the 
+  // visual feedback to the user. We can leave it as an empty funcion
+  // so that there's no feedback to the user or change it for another one to
+  // choose different ways of how to provide said feedback
+  final OnExceptionCatch exceptionCatcher;
+
 
   final List<String> _foundRepos = [];
 
@@ -23,40 +37,76 @@ class SearchModel extends ChangeNotifier{
   SearchResult _searchResult = SearchResult();
   SearchResult get searchResult => _searchResult;
 
-  Future<void> doSearch(String? keyword) async {
+  Future<bool> doSearch(String? keyword) async {
+
+    bool res = true;
 
     _isBusy = true;
     _searchResult = SearchResult();
     _foundRepos.clear();
     notifyListeners();
 
-    _queryParams.keyword = keyword;
-    _queryParams.page = Globals.apiPageDefault;
-    _searchResult = await _gitService.repoSearch(queryParams);
-    _searchResult.items = _filterRepos(_searchResult);
-    
+    try{
+
+      _queryParams.keyword = keyword;
+      _queryParams.page = Globals.apiPageDefault;
+      _searchResult = await gitService.repoSearch(queryParams);
+      _searchResult.items = _filterRepos(_searchResult);
+
+    }catch(e){
+      res = false;
+      // In case an error pops up we clear the results and show a snackbar
+      // with a message for it.
+      _queryParams.reset();
+      _searchResult = SearchResult();
+      String msg = e.toString();
+      if (e.runtimeType != HttpException){
+        msg = 'errorGeneric'.tr(args: [msg]);
+      }
+      exceptionCatcher(msg);
+    }
     _isBusy = false;
     notifyListeners();
 
+    return res;
   }
 
-  Future<void> searchNext() async {
+  Future<bool> searchNext() async {
+
+    bool res = true;
 
     _isBusy = true;
     notifyListeners();
 
-    _queryParams.page++;
-    final SearchResult res = await _gitService.repoSearch(queryParams);
+    try{
+      _queryParams.page++;
+      final SearchResult res = await gitService.repoSearch(queryParams);
 
-    res.items = _filterRepos(res);
+      res.items = _filterRepos(res);
 
-    if(res.items != null){
-      _searchResult.items?.addAll(res.items!.toList());
+      if(res.items != null){
+        _searchResult.items?.addAll(res.items!.toList());
+      }
+
+    }catch(e){
+      res = false;
+      // In case an error pops up we clear the results and show a snackbar
+      // with a message for it.
+      _queryParams.reset();
+      _searchResult = SearchResult();
+
+      String msg = e.toString();
+      if (e.runtimeType != HttpException){
+        msg = 'errorGeneric'.tr(args: [msg]);
+      }
+
+      exceptionCatcher(msg);
     }
 
     _isBusy = false;
     notifyListeners();
 
+    return res;
   }
 
   List<SearchResultItem> _filterRepos(SearchResult res) {

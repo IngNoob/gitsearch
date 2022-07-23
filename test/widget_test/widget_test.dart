@@ -11,24 +11,35 @@ import 'package:gitsearch/Items/search_result.dart';
 import 'package:gitsearch/Models/history_model.dart';
 import 'package:gitsearch/Models/search_model.dart';
 import 'package:gitsearch/Pages/search_page_tab.dart';
+import 'package:gitsearch/Services/db_handler.dart';
 import 'package:gitsearch/Services/github_service.dart';
 import 'package:gitsearch/Widgets/search_result_item_card.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
-
+import 'package:gitsearch/Common/utils.dart' as utils;
 import '../unit_test/search_provider_test.mocks.dart';
 
  
 @GenerateMocks([GitHubService])
 void main() async {
 
+  TestWidgetsFlutterBinding.ensureInitialized();
+
   late MockGitHubService mockGitHubService;
   late SearchModel searchModel;
+  late HistoryModel historyModel;
 
   setUpAll((){
     mockGitHubService = MockGitHubService();
-    searchModel = SearchModel(mockGitHubService);
+    searchModel = SearchModel(
+      gitService: mockGitHubService,
+      exceptionCatcher: utils.showErrorSnackbar
+    );
+    historyModel = HistoryModel(
+      dbHandler: DBHandler(), 
+      exceptionCatcher: utils.showErrorSnackbar
+    );
   });
   
 
@@ -41,7 +52,7 @@ void main() async {
     await tester.pumpWidget( 
       MultiProvider(providers: [
         ChangeNotifierProvider(create: (context) => searchModel),
-        ChangeNotifierProvider(create: (context) => HistoryModel())
+        ChangeNotifierProvider(create: (context) => historyModel)
       ],
       child: const MaterialApp( 
           home: SearchPageTab()
@@ -68,5 +79,4 @@ void main() async {
     expect(find.byType(SearchResultItemCard), findsOneWidget);
 
   });
-
 }

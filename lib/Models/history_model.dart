@@ -1,14 +1,28 @@
 import 'dart:collection';
 import 'dart:io';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:gitsearch/Common/utils.dart';
 import 'package:gitsearch/Services/db_handler.dart';
 import 'package:gitsearch/Items/history_item.dart';
 import 'package:sqflite/sqlite_api.dart';
 
 class HistoryModel extends ChangeNotifier{
 
-  final DBHandler _dbHandler = DBHandler();
+
+  HistoryModel({
+    required this.dbHandler,
+    required this.exceptionCatcher
+  });
+
+  final DBHandler dbHandler;
+
+  // This is a callback to a function that is gonna deal with the 
+  // visual feedback to the user. We can leave it as an empty funcion
+  // so that there's no feedback to the user or change it for another one to
+  // choose different ways of how to provide said feedback
+  final OnExceptionCatch exceptionCatcher;
 
   bool _isBusy = false;
   bool get isBusy => _isBusy;
@@ -18,12 +32,28 @@ class HistoryModel extends ChangeNotifier{
 
   Future<void> debugOpen(Database db) async {
     if (Platform.environment.containsKey('FLUTTER_TEST')){
-      _dbHandler.openTestDatabase(db);
+      dbHandler.openTestDatabase(db);
     }
   }
 
   Future<void> openDb() async {
-    await _dbHandler.initDatabase();
+    _isBusy = true;
+    notifyListeners();
+    try{
+      await dbHandler.initDatabase();
+     }catch(e){
+      
+      // In case an error pops up we show a snackbar
+      // with a message for it.
+
+      String msg = e.toString();
+      if (e.runtimeType != IOException){
+        msg = 'errorGeneric'.tr(args: [msg]);
+      }
+      exceptionCatcher(msg);
+    }
+    _isBusy = false;
+    notifyListeners();
   }
 
   Future<void> getHistory() async {
@@ -32,26 +62,48 @@ class HistoryModel extends ChangeNotifier{
     _history = [];
     notifyListeners();
 
-    _history = await _getHistories();
+    try{
+
+      _history = await dbHandler.getHistories();
+
+    }catch(e){
+      
+      // In case an error pops up we show a snackbar
+      // with a message for it.
+
+      String msg = e.toString();
+      if (e.runtimeType != IOException){
+        msg = 'errorGeneric'.tr(args: [msg]);
+      }
+      exceptionCatcher(msg);
+    }
 
     _isBusy = false;
     notifyListeners();
 
   }
 
-  Future<List<HistoryItem>> _getHistories() async {
-    return _dbHandler.getHistories();
-  }
-
-
   Future<void> addToHistory(String? keyword) async {
     
     _isBusy = true;
     notifyListeners();
+    try{
 
-    final HistoryItem item = HistoryItem(keyword!);
-    _dbHandler.updateOrInsertHistoryRecord(item);
-    _history = await _getHistories();
+      final HistoryItem item = HistoryItem(keyword!);
+      dbHandler.updateOrInsertHistoryRecord(item);
+      _history = await dbHandler.getHistories();
+
+    }catch(e){
+
+      // In case an error pops up we show a snackbar
+      // with a message for it.
+
+      String msg = e.toString();
+      if (e.runtimeType != IOException){
+        msg = 'errorGeneric'.tr(args: [msg]);
+      }
+      exceptionCatcher(msg);
+    }
 
     _isBusy = false;
     notifyListeners();
@@ -63,10 +115,21 @@ class HistoryModel extends ChangeNotifier{
     _isBusy = true;
     notifyListeners();
 
-    final HistoryItem item = HistoryItem(keyword!);
-    _dbHandler.deleteHistoryRecord(item);
-    _history = await _getHistories();
+    try{
 
+      final HistoryItem item = HistoryItem(keyword!);
+      dbHandler.deleteHistoryRecord(item);
+      _history = await dbHandler.getHistories();
+
+    }catch(e){
+      // In case an error pops up we show a snackbar
+      // with a message for it.
+      String msg = e.toString();
+      if (e.runtimeType != IOException){
+        msg = 'errorGeneric'.tr(args: [msg]);
+      }
+      exceptionCatcher(msg);
+    }
 
     _isBusy = false;
     notifyListeners();
@@ -76,9 +139,21 @@ class HistoryModel extends ChangeNotifier{
 
     _isBusy = true;
     notifyListeners();
+    
+    try{
 
-    _dbHandler.clearHistory();
-    _history = [];
+      dbHandler.clearHistory();
+      _history = [];
+
+    }catch(e){
+      // In case an error pops up we show a snackbar
+      // with a message for it.
+      String msg = e.toString();
+      if (e.runtimeType != IOException){
+        msg = 'errorGeneric'.tr(args: [msg]);
+      }
+      exceptionCatcher(msg);
+    }
 
     _isBusy = false;
     notifyListeners();
