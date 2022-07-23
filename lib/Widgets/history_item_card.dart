@@ -29,7 +29,7 @@ class HistoryItemCard extends StatelessWidget {
                 children: [
                   SlidableAction(
                     onPressed: deleteHistory,
-                    backgroundColor: Color(0xFFFE4A49),
+                    backgroundColor: const Color(0xFFFE4A49),
                     foregroundColor: Colors.white,
                     icon: Icons.delete,
                   ),

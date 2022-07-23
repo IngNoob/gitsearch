@@ -65,9 +65,7 @@ class _SearchPageTabState extends State<SearchPageTab> with AutomaticKeepAliveCl
                 builder: (context, sModel, child) {
                   final SearchResult search = sModel.searchResult;
 
-                  if (search.items != null) {
-                    elements= List.generate(search.items?.length ?? 0, (index) => SearchResultItemCard(search.items![index]));
-                  }
+                  elements= List.generate(search.items?.length ?? 0, (index) => SearchResultItemCard(search.items![index]));
 
                   bool moreFlag = false;
                   if (sModel.searchResult.totalCount != null){
@@ -76,64 +74,67 @@ class _SearchPageTabState extends State<SearchPageTab> with AutomaticKeepAliveCl
 
                   final Color outlineColor = MyApp.themeNotifier.value == ThemeMode.light ? Theme.of(context).colorScheme.primary : Colors.white;
                 
-                  return elements.isEmpty ? 
-                    Center(child: Text('welcomeSearch'.tr(), textAlign: TextAlign.center)):
-                    Column(
-                      children: [
-                        // Searched keyword, total results
-                        buildTotalParams(sModel),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 8), 
-                          child: Divider(color: Theme.of(context).colorScheme.primary, thickness: 2,)
-                        ),
+                  return Column(
+                    children: [
+                      // Searched keyword, total results
+                      buildTotalParams(sModel),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8), 
+                        child: Divider(color: Theme.of(context).colorScheme.primary, thickness: 2,)
+                      ),
 
-                        Expanded( 
-                          child: ListView(
-                            children: [
-                              // Can't use orientation builder here cause it gives the orientation of the
-                              // parent widget, which in listview's case is alway vertical
-                              // https://stackoverflow.com/questions/50757851/orientation-builder-gives-wrong-orientation
-                              AlignedGridView.count(
-                                key: _listViewKey,
-                                controller: _listScrollCtrl,
-                                crossAxisCount: MediaQuery.of(context).orientation == Orientation.portrait ? 1 : 3,
-                                mainAxisSpacing: 4,
-                                crossAxisSpacing: 4,
-                                shrinkWrap: true,
-                                physics: const ScrollPhysics(),             
-                                itemCount: elements.length,
-                                  itemBuilder: (BuildContext context, int index) {
-                                    return elements[index];
-                                  }
-                                ),
-                                  
-                              
-                              if (!sModel.isBusy && moreFlag)                                                                     
-                                Container(
-                                  padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.2, vertical: 16),
-                                  child: OutlinedButton(
-                                    style: OutlinedButton.styleFrom(
-                                      primary:  outlineColor,
-                                      side: BorderSide(color: outlineColor)
-                                    ),
-                                    child: Text('more'.tr()),
-                                    onPressed: () => Provider.of<SearchModel>(context, listen: false).searchNext(), 
-                                  )
-                                ),
+                      elements.isEmpty ? 
+                      Expanded(child:
+                        Center(child: Text('welcomeSearch'.tr(), textAlign: TextAlign.center))
+                      ) 
+                      :
+                      Expanded( 
+                        child: ListView(
+                          children: [
+                            // Can't use orientation builder here cause it gives the orientation of the
+                            // parent widget, which in listview's case is alway vertical
+                            // https://stackoverflow.com/questions/50757851/orientation-builder-gives-wrong-orientation
+                            AlignedGridView.count(
+                              key: _listViewKey,
+                              controller: _listScrollCtrl,
+                              crossAxisCount: MediaQuery.of(context).orientation == Orientation.portrait ? 1 : 3,
+                              mainAxisSpacing: 4,
+                              crossAxisSpacing: 4,
+                              shrinkWrap: true,
+                              physics: const ScrollPhysics(),             
+                              itemCount: elements.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return elements[index];
+                                }
+                              ),
                                 
-                              if (sModel.isBusy)
-                                Center(
-                                  child: Container(
-                                    padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.2, vertical: 16),
-                                    child: Text('searching'.tr())
-                                  )
+                            
+                            if (!sModel.isBusy && moreFlag)                                                                     
+                              Container(
+                                padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.2, vertical: 16),
+                                child: OutlinedButton(
+                                  style: OutlinedButton.styleFrom(
+                                    primary:  outlineColor,
+                                    side: BorderSide(color: outlineColor)
+                                  ),
+                                  child: Text('more'.tr()),
+                                  onPressed: () => Provider.of<SearchModel>(context, listen: false).searchNext(), 
                                 )
-                            ],
-                          )
-                        ),
+                              ),
+                              
+                            if (sModel.isBusy)
+                              Center(
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.2, vertical: 16),
+                                  child: Text('searching'.tr())
+                                )
+                              )
+                          ],
+                        )
+                      ),
 
-                      ],
-                    );
+                    ],
+                  );
                                 
                 }
                     
@@ -154,17 +155,18 @@ class _SearchPageTabState extends State<SearchPageTab> with AutomaticKeepAliveCl
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
         children: [
-          Container(
-            padding: const EdgeInsets.all(4),
-            decoration: ShapeDecoration(
-              color: Theme.of(context).colorScheme.primary,
-              shape: RoundedRectangleBorder( borderRadius: BorderRadius.circular(4)),
+          if (sModel.queryParams.keyword != null)
+            Container(
+              padding: const EdgeInsets.all(4),
+              decoration: ShapeDecoration(
+                color: Theme.of(context).colorScheme.primary,
+                shape: RoundedRectangleBorder( borderRadius: BorderRadius.circular(4)),
+              ),
+              child: Text(
+                sModel.queryParams.keyword!,
+                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              ),
             ),
-            child: Text(
-              sModel.queryParams.keyword ?? '-',
-              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-            ),
-          ),
           const Spacer(),
           Container(
             alignment: Alignment.centerRight,

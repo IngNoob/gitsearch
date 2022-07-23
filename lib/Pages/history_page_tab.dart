@@ -50,8 +50,6 @@ class _HistoryPageTabState extends State<HistoryPageTab> with AutomaticKeepAlive
 
     super.build(context);
 
-    final Size screenSize = MediaQuery.of(context).size;
-
     return Scaffold(
       body: ModalProgressHUD(
         inAsyncCall: Provider.of<HistoryModel>(context).isBusy,
@@ -64,9 +62,6 @@ class _HistoryPageTabState extends State<HistoryPageTab> with AutomaticKeepAlive
                 builder: (context, hModel, child) {
                   final List<HistoryItem> history = hModel.history;
 
-                  // if (hModel.queryParams.page == 1 && _listScrollCtrl.positions.isNotEmpty) {
-                  //   _listScrollCtrl.animateTo(_listScrollCtrl.position.minScrollExtent, duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
-                  // }
                   elements= List.generate(history.length, (index) => HistoryItemCard(history[index], widget.tabController) );
 
                   int totalElements = 0;
