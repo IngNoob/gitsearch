@@ -7,12 +7,6 @@ class SearchResultItemCard extends StatelessWidget {
 
   final SearchResultItem item;
 
-//   @override
-//   State<SearchResultItemCard> createState() => _SearchResultItemCardState();
-// }
-
-// class _SearchResultItemCardState extends State<SearchResultItemCard> {
-
   @override
   Widget build(BuildContext context) {
 
@@ -40,7 +34,7 @@ class SearchResultItemCard extends StatelessWidget {
                   child:  Icon(Icons.book)
                 ),
                 Expanded(child:
-                  Text(item.name ?? "***Error***", overflow: TextOverflow.clip,)
+                  Text(item.name ?? "***Error***", overflow: TextOverflow.ellipsis)
                 ),
               ],
             ),

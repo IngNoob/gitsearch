@@ -1,5 +1,15 @@
 str,ja_JP,en
+welcomeSearch,ようこそ！\nキーワードを入力してから検索ボタンを押してください,Welcome!\nType something and press search to start
+welcomeHistory,検索履歴ページです。何か検索出来ましたら、その後、ここにひょうじされます。, This is the search history.\nLook up something first and it'll show here later
 inputHint,検索キーワードを入力,Input search keyword
 requiredHint,入力必要です,Required field
-searchBtn,リポジトリを検索する,Search repo
+searchBtn,検索する,Search
 resultCount,{}件リポジトリ,{} repositories
+more,さらに検索する,View more
+searching,検索中...,Searching...
+stars,{}\nStar数,{}\nStars
+watching,{}\nWatcher数,{}\nWatchers
+forks,{}\nFork数,{}\nForks
+issues,{}\nIssue数,{}\nIssues
+profileCheck,ユーザー確認,Check profile
+repoCheck,リポジトリ確認,Check repo

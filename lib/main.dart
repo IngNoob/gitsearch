@@ -28,7 +28,7 @@ void main() async {
       ],
       path: 'assets/translations/translations.csv',
       assetLoader: CsvAssetLoader(),
-      fallbackLocale: const Locale('jp', ''), 
+      fallbackLocale: const Locale('ja', 'JP'), 
       child: MultiProvider(providers: [
         ChangeNotifierProvider(create: (context) => SearchModel()),
         ChangeNotifierProvider(create: (context) => historyModel)
