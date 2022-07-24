@@ -111,6 +111,12 @@ class SearchModel extends ChangeNotifier{
     return res;
   }
 
+  void resetSearch(){
+    _queryParams.reset();
+    _searchResult = SearchResult();
+    notifyListeners();
+  }
+
   // ignore: unused_element
   List<SearchResultItem> _filterRepos(SearchResult res) {
 

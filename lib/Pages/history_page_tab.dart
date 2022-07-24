@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gitsearch/Items/history_item.dart';
 import 'package:gitsearch/Models/history_model.dart';
 import 'package:gitsearch/Widgets/history_item_card.dart';
+import 'package:gitsearch/Widgets/loading_animation.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
 
@@ -52,7 +53,7 @@ class _HistoryPageTabState extends State<HistoryPageTab> with AutomaticKeepAlive
     return Scaffold(
       body: ModalProgressHUD(
         inAsyncCall: Provider.of<HistoryModel>(context).isBusy,
-        progressIndicator: CircularProgressIndicator(color: Theme.of(context).colorScheme.primary),
+        progressIndicator: const LoadingAnimation(),
         child: Column(
           children: [
 

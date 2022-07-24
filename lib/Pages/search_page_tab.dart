@@ -4,6 +4,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:gitsearch/Items/search_result.dart';
 import 'package:gitsearch/Models/search_model.dart';
 import 'package:gitsearch/Models/settings_model.dart';
+import 'package:gitsearch/Widgets/loading_animation.dart';
 import 'package:gitsearch/Widgets/search_form_widget.dart';
 import 'package:gitsearch/Widgets/search_result_item_card.dart';
 import 'package:gitsearch/Widgets/search_total_info.dart';
@@ -55,7 +56,7 @@ class _SearchPageTabState extends State<SearchPageTab> with AutomaticKeepAliveCl
     return Scaffold(
       body: ModalProgressHUD(
         inAsyncCall: Provider.of<SearchModel>(context).isBusy,
-        progressIndicator: CircularProgressIndicator(color: Theme.of(context).colorScheme.primary),
+        progressIndicator: const LoadingAnimation(),
         child: Column(
           children: [
 
@@ -88,7 +89,7 @@ class _SearchPageTabState extends State<SearchPageTab> with AutomaticKeepAliveCl
 
                       elements.isEmpty ? 
                       Expanded(child:
-                        Center(child: Text('welcomeSearch'.tr(), textAlign: TextAlign.center))
+                        Center(child: Text( sModel.isBusy? 'searching'.tr() : 'welcomeSearch'.tr(), textAlign: TextAlign.center))
                       ) 
                       :
                       Expanded( 
@@ -132,7 +133,7 @@ class _SearchPageTabState extends State<SearchPageTab> with AutomaticKeepAliveCl
                                   child: Text('searching'.tr())
                                 )
                               )
-                            
+                              
                           ],
                         )
                       ),
