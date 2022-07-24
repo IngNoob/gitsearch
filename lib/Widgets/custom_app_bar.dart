@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:gitsearch/app.dart';
+import 'package:gitsearch/Models/settings_model.dart';
 import 'package:gitsearch/Widgets/drop_language_locale.dart';
+import 'package:provider/provider.dart';
 
 
 class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
@@ -67,13 +68,13 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
             PopupMenuItem(
               child: Center(
                 child: Icon(
-                  MyApp.themeNotifier.value == ThemeMode.light ? Icons.dark_mode : Icons.light_mode,
-                  color: MyApp.themeNotifier.value == ThemeMode.light ? 
+                  Provider.of<SettingsModel>(context, listen: false).theme == ThemeMode.light ? Icons.dark_mode : Icons.light_mode,
+                  color: Provider.of<SettingsModel>(context, listen: false).theme == ThemeMode.light ? 
                     Theme.of(context).colorScheme.primary : null,
                 )
               ),
               onTap:  () {
-                MyApp.themeNotifier.value = MyApp.themeNotifier.value == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
+                Provider.of<SettingsModel>(context, listen: false).toogleThemeMode();
                 //Navigator.pop(context);
               },
             ),

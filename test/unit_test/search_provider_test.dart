@@ -1,8 +1,8 @@
+import 'package:flutter_test/flutter_test.dart';
 import 'package:gitsearch/Common/globals.dart';
 import 'package:gitsearch/Items/search_query.dart';
 import 'package:gitsearch/Items/search_result.dart';
 import 'package:gitsearch/Models/search_model.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:gitsearch/Services/github_service.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';

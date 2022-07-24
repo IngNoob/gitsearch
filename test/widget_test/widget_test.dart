@@ -7,9 +7,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:gitsearch/Common/utils.dart' as utils;
 import 'package:gitsearch/Items/search_result.dart';
 import 'package:gitsearch/Models/history_model.dart';
 import 'package:gitsearch/Models/search_model.dart';
+import 'package:gitsearch/Models/settings_model.dart';
 import 'package:gitsearch/Pages/search_page_tab.dart';
 import 'package:gitsearch/Services/db_handler.dart';
 import 'package:gitsearch/Services/github_service.dart';
@@ -17,7 +19,7 @@ import 'package:gitsearch/Widgets/search_result_item_card.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
-import 'package:gitsearch/Common/utils.dart' as utils;
+
 import '../unit_test/search_provider_test.mocks.dart';
 
  
@@ -29,6 +31,7 @@ void main() async {
   late MockGitHubService mockGitHubService;
   late SearchModel searchModel;
   late HistoryModel historyModel;
+  late SettingsModel settingsModel;
 
   setUpAll((){
     mockGitHubService = MockGitHubService();
@@ -38,6 +41,9 @@ void main() async {
     );
     historyModel = HistoryModel(
       dbHandler: DBHandler(), 
+      exceptionCatcher: utils.showErrorSnackbar
+    );
+    settingsModel = SettingsModel(
       exceptionCatcher: utils.showErrorSnackbar
     );
   });
@@ -52,12 +58,13 @@ void main() async {
     await tester.pumpWidget( 
       MultiProvider(providers: [
         ChangeNotifierProvider(create: (context) => searchModel),
-        ChangeNotifierProvider(create: (context) => historyModel)
+        ChangeNotifierProvider(create: (context) => historyModel),
+        ChangeNotifierProvider(create: (context) => settingsModel)
       ],
       child: const MaterialApp( 
           home: SearchPageTab()
         )
-      ), const Duration(seconds: 1)
+      ), const Duration(seconds: 2)
     );
 
     // On the page

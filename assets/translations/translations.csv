@@ -15,3 +15,4 @@ profileCheck,ユーザー確認,Check profile
 repoCheck,リポジトリ確認,Check repo
 close,閉じる,Dismiss
 errorGeneric,エラー発生しました\n{},An error has ocurred\n{}
+errorSettings,エラー発生しました：設定情報不具合です,Error:Corrupted settings

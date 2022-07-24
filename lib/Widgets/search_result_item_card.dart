@@ -3,9 +3,10 @@ import 'package:gitsearch/Items/search_result_item.dart';
 import 'package:gitsearch/Widgets/search_result_item_detail.dart';
 
 class SearchResultItemCard extends StatelessWidget {
-  const SearchResultItemCard(this.item, {Key? key}) : super(key: key);
+  const SearchResultItemCard(this.item, this.index, {Key? key}) : super(key: key);
 
   final SearchResultItem item;
+  final int index;
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +17,7 @@ class SearchResultItemCard extends StatelessWidget {
         child: 
           ListTile(
             leading: Hero(
-              tag: item.fullName as String,
+              tag: item.fullName!+index.toString(),
               child: CircleAvatar(
                 backgroundColor: Theme.of(context).colorScheme.primary,
                 child: CircleAvatar(
@@ -54,7 +55,7 @@ class SearchResultItemCard extends StatelessWidget {
         barrierColor: Colors.grey.withOpacity(0.3),
         transitionDuration: const Duration(milliseconds: 300),
         transitionsBuilder: (c, anim, a2, child) => FadeTransition(opacity: anim, child: child),
-        pageBuilder: (_, __, ___) => SearchResultItemDetail(item),
+        pageBuilder: (_, __, ___) => SearchResultItemDetail(item, index),
       ),
     );
   }

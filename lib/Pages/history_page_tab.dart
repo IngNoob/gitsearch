@@ -1,11 +1,11 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gitsearch/Items/history_item.dart';
 import 'package:gitsearch/Models/history_model.dart';
 import 'package:gitsearch/Widgets/history_item_card.dart';
-
+import 'package:gitsearch/Widgets/loading_animation.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
-import 'package:easy_localization/easy_localization.dart';
 
 
 class HistoryPageTab extends StatefulWidget {
@@ -50,12 +50,10 @@ class _HistoryPageTabState extends State<HistoryPageTab> with AutomaticKeepAlive
 
     super.build(context);
 
-    final Size screenSize = MediaQuery.of(context).size;
-
     return Scaffold(
       body: ModalProgressHUD(
         inAsyncCall: Provider.of<HistoryModel>(context).isBusy,
-        progressIndicator: CircularProgressIndicator(color: Theme.of(context).colorScheme.primary),
+        progressIndicator: const LoadingAnimation(),
         child: Column(
           children: [
 
@@ -64,9 +62,6 @@ class _HistoryPageTabState extends State<HistoryPageTab> with AutomaticKeepAlive
                 builder: (context, hModel, child) {
                   final List<HistoryItem> history = hModel.history;
 
-                  // if (hModel.queryParams.page == 1 && _listScrollCtrl.positions.isNotEmpty) {
-                  //   _listScrollCtrl.animateTo(_listScrollCtrl.position.minScrollExtent, duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
-                  // }
                   elements= List.generate(history.length, (index) => HistoryItemCard(history[index], widget.tabController) );
 
                   int totalElements = 0;

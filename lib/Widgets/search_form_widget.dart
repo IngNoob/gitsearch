@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gitsearch/Items/search_query.dart';
 import 'package:gitsearch/Models/history_model.dart';
 import 'package:gitsearch/Models/search_model.dart';
+import 'package:gitsearch/Models/settings_model.dart';
 import 'package:provider/provider.dart';
 
 class SearchFormWidget extends StatefulWidget {
@@ -51,10 +52,11 @@ class _SearchFormWidgetState extends State<SearchFormWidget> {
             children: [
                 SizedBox(width: 500,
                   child: TextFormField(
-                    maxLength: 20,
+                    maxLength: 20,                    
                     controller: _keywordTextController,
                     decoration: InputDecoration(
-                      hintText: 'inputHint'.tr()
+                      hintText: 'inputHint'.tr(),
+                      isDense: true
                     ),
                     validator: (String? value){
                         if (value!.isEmpty){
@@ -75,16 +77,30 @@ class _SearchFormWidgetState extends State<SearchFormWidget> {
                       searchData.keyword = value;
                     },    
                     
-                ) 
+                  ) 
                 ),
 
                 Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: ElevatedButton.icon(
-                    key: const Key('searchBtn'),
-                    icon: const Icon(Icons.search), 
-                    label: Text('searchBtn'.tr()),
-                    onPressed: doSearch, 
+                  padding: const EdgeInsets.all(4),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton.icon(
+                        key: const Key('searchBtn'),
+                        icon: const Icon(Icons.search), 
+                        label: Text('searchBtn'.tr()),
+                        onPressed: doSearch, 
+                      ),
+                      IconButton(
+                        onPressed: resetSearch, 
+                        icon: Icon(
+                          Icons.delete, 
+                          color: Provider.of<SettingsModel>(context, listen: false).theme == ThemeMode.light ? 
+                            Theme.of(context).colorScheme.primary : Colors.white
+                          ),
+                      ),
+                    ],
                   )
                 )
             ]
@@ -112,6 +128,14 @@ class _SearchFormWidgetState extends State<SearchFormWidget> {
       });
     }
 
+  }
+
+  void resetSearch() async {
+    setState(() {
+      _keywordTextController.clear();
+      _autovalidateMode = AutovalidateMode.disabled;
+      Provider.of<SearchModel>(context, listen: false).resetSearch();
+    });
   }
   
 
