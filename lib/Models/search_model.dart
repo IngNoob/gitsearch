@@ -111,6 +111,7 @@ class SearchModel extends ChangeNotifier{
     return res;
   }
 
+  // ignore: unused_element
   List<SearchResultItem> _filterRepos(SearchResult res) {
 
     // https://github.com/Giphy/GiphyAPI/issues/235
