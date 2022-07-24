@@ -51,6 +51,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITSEARCH_ACTION_TOKEN }}
           skip-on-empty: false
+          skip-commit: true
 
   buildAndroid:
     name: Building for android
