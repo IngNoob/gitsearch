@@ -54,7 +54,7 @@ class _SearchFormWidgetState extends State<SearchFormWidget> {
                     maxLength: 20,
                     controller: _keywordTextController,
                     decoration: InputDecoration(
-                      hintText: 'inputHint'.tr()
+                      hintText: 'inputHint'.tr(),//focusColor: Colors.white
                     ),
                     validator: (String? value){
                         if (value!.isEmpty){
@@ -75,7 +75,7 @@ class _SearchFormWidgetState extends State<SearchFormWidget> {
                       searchData.keyword = value;
                     },    
                     
-                ) 
+                  ) 
                 ),
 
                 Padding(

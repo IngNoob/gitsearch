@@ -2,12 +2,12 @@
 import 'dart:developer';
 import 'dart:ui';
 
-// Flutter imports:
-import 'package:csv/csv_settings_autodetection.dart';
-import 'package:flutter/services.dart';
-
 // Package imports:
 import 'package:csv/csv.dart';
+import 'package:csv/csv_settings_autodetection.dart';
+
+// Flutter imports:
+import 'package:flutter/services.dart';
 
 // Project imports:
 import 'asset_loader.dart';

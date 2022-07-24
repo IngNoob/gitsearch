@@ -1,10 +1,12 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:gitsearch/Pages/home_page.dart';
-
 import 'package:gitsearch/Common/routes.dart';
+import 'package:gitsearch/Pages/home_page.dart';
 import 'package:gitsearch/Pages/search_page_tab.dart';
+import 'package:provider/provider.dart';
+
+import 'Models/settings_model.dart';
 
 final GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
 
@@ -12,15 +14,11 @@ final GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // Default flutter change notifier, not neccesary to use the provider package for just one value
-  static final ValueNotifier<ThemeMode> themeNotifier = ValueNotifier(ThemeMode.light);
-
   @override
   Widget build(BuildContext context) {
 
-    return ValueListenableBuilder<ThemeMode>(
-      valueListenable: themeNotifier,
-      builder: (_, ThemeMode currentMode, __) {
+    return Consumer<SettingsModel>(
+      builder: (context, setModel, child) {
 
         rebuildAllChildren(context);
 
@@ -39,7 +37,7 @@ class MyApp extends StatelessWidget {
             colorScheme: const ColorScheme.light().copyWith(primary: const Color(0xFF424242)),
             bottomNavigationBarTheme: const BottomNavigationBarThemeData(backgroundColor: Color(0xFF424242))
           ),
-          themeMode: currentMode,
+          themeMode: setModel.theme,
           onGenerateRoute: (RouteSettings settings){
 
             if (kDebugMode) {

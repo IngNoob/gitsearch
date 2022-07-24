@@ -1,13 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gitsearch/Common/localizations/csv_asset_loader.dart';
+import 'package:gitsearch/Common/utils.dart' as utils;
 import 'package:gitsearch/Models/history_model.dart';
 import 'package:gitsearch/Models/search_model.dart';
+import 'package:gitsearch/Models/settings_model.dart';
 import 'package:gitsearch/Services/db_handler.dart';
 import 'package:gitsearch/Services/github_service.dart';
 import 'package:gitsearch/app.dart';
 import 'package:provider/provider.dart';
-import 'package:gitsearch/Common/utils.dart' as utils;
 
 void main() async {
 
@@ -24,6 +25,9 @@ void main() async {
     exceptionCatcher: utils.showErrorSnackbar,
   );
   await historyModel.openDb();
+
+  SettingsModel settingsModel = SettingsModel(exceptionCatcher: utils.showErrorSnackbar);
+  await settingsModel.loadSettings();
 
   runApp(
     EasyLocalization(
@@ -42,7 +46,8 @@ void main() async {
             exceptionCatcher: utils.showErrorSnackbar,
           )
         ),
-        ChangeNotifierProvider(create: (context) => historyModel)
+        ChangeNotifierProvider(create: (context) => historyModel),
+        ChangeNotifierProvider(create: (context) => settingsModel),
       ], 
       child: const MyApp()
       )

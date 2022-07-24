@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:gitsearch/Items/search_result.dart';
 import 'package:gitsearch/Models/search_model.dart';
+import 'package:gitsearch/Models/settings_model.dart';
 import 'package:gitsearch/Widgets/search_form_widget.dart';
 import 'package:gitsearch/Widgets/search_result_item_card.dart';
-import 'package:gitsearch/app.dart';
+import 'package:gitsearch/Widgets/search_total_info.dart';
 
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
@@ -65,22 +66,24 @@ class _SearchPageTabState extends State<SearchPageTab> with AutomaticKeepAliveCl
                 builder: (context, sModel, child) {
                   final SearchResult search = sModel.searchResult;
 
-                  elements= List.generate(search.items?.length ?? 0, (index) => SearchResultItemCard(search.items![index]));
+                  elements = List.generate(search.items?.length ?? 0, (index) => SearchResultItemCard(search.items![index], index));
 
                   bool moreFlag = false;
                   if (sModel.searchResult.totalCount != null){
                     moreFlag = sModel.searchResult.totalCount! > elements.length;
                   } 
 
-                  final Color outlineColor = MyApp.themeNotifier.value == ThemeMode.light ? Theme.of(context).colorScheme.primary : Colors.white;
+                  final Color outlineColor = 
+                    Provider.of<SettingsModel>(context, listen: false).theme == ThemeMode.light ? 
+                    Theme.of(context).colorScheme.primary : Colors.white;
                 
                   return Column(
                     children: [
                       // Searched keyword, total results
-                      buildTotalParams(sModel),
+                      const SearchTotalInfo(),
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8), 
-                        child: Divider(color: Theme.of(context).colorScheme.primary, thickness: 2,)
+                        child: Divider(color: Theme.of(context).colorScheme.primary, thickness: 3,)
                       ),
 
                       elements.isEmpty ? 
@@ -129,6 +132,7 @@ class _SearchPageTabState extends State<SearchPageTab> with AutomaticKeepAliveCl
                                   child: Text('searching'.tr())
                                 )
                               )
+                            
                           ],
                         )
                       ),
@@ -146,42 +150,6 @@ class _SearchPageTabState extends State<SearchPageTab> with AutomaticKeepAliveCl
         ),
 
       ),
-    );
-  }
-
-  Widget buildTotalParams(SearchModel sModel){
-    
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Row(
-        children: [
-          if (sModel.queryParams.keyword != null)
-            Container(
-              padding: const EdgeInsets.all(4),
-              decoration: ShapeDecoration(
-                color: Theme.of(context).colorScheme.primary,
-                shape: RoundedRectangleBorder( borderRadius: BorderRadius.circular(4)),
-              ),
-              child: Text(
-                sModel.queryParams.keyword!,
-                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-              ),
-            ),
-          const Spacer(),
-          Container(
-            alignment: Alignment.centerRight,
-            child: Text(
-              'resultCount'.tr(args: [NumberFormat.compact().format(sModel.searchResult.totalCount ?? 0)]), 
-              style: TextStyle(
-                fontWeight: FontWeight.bold, 
-                color: MyApp.themeNotifier.value == ThemeMode.light ? 
-                  Theme.of(context).colorScheme.primary 
-                  : null //Default value as it is not being overriden
-              )
-            )
-          )
-        ],
-      )
     );
   }
 

@@ -3,7 +3,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:gitsearch/Items/history_item.dart';
 import 'package:gitsearch/Models/history_model.dart';
 import 'package:gitsearch/Models/search_model.dart';
-import 'package:gitsearch/app.dart';
+import 'package:gitsearch/Models/settings_model.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -49,7 +49,7 @@ class HistoryItemCard extends StatelessWidget {
       leading: Container(
         padding: const EdgeInsets.all(8),
         decoration: ShapeDecoration(
-          color: MyApp.themeNotifier.value == ThemeMode.light ? 
+          color: Provider.of<SettingsModel>(context, listen: false).theme == ThemeMode.light ? 
             Theme.of(context).colorScheme.primary 
             : Theme.of(context).backgroundColor, 
           shape: RoundedRectangleBorder( borderRadius: BorderRadius.circular(4)),

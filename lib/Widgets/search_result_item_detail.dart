@@ -1,14 +1,16 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:gitsearch/Items/search_result_item.dart';
-import 'package:gitsearch/app.dart';
+import 'package:gitsearch/Models/settings_model.dart';
+import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 
 class SearchResultItemDetail extends StatefulWidget {
-  const SearchResultItemDetail(this.item, {Key? key}) : super(key: key);
+  const SearchResultItemDetail(this.item, this.index, {Key? key}) : super(key: key);
 
   final SearchResultItem item;
+  final int index;
 
   @override
   State<SearchResultItemDetail> createState() => _SearchResultItemDetailState();
@@ -27,7 +29,7 @@ class _SearchResultItemDetailState extends State<SearchResultItemDetail> {
 
             IconButton(
               icon: Icon(Icons.close, size: 30,
-                color: MyApp.themeNotifier.value == ThemeMode.light ? 
+                color: Provider.of<SettingsModel>(context, listen: false).theme == ThemeMode.light ? 
                   Theme.of(context).colorScheme.primary 
                   : Theme.of(context).backgroundColor
               ),
@@ -63,7 +65,7 @@ class _SearchResultItemDetailState extends State<SearchResultItemDetail> {
                           child: Container(
                             padding: const EdgeInsets.all(8),
                             decoration: ShapeDecoration(
-                              color: MyApp.themeNotifier.value == ThemeMode.light ? 
+                              color: Provider.of<SettingsModel>(context, listen: false).theme == ThemeMode.light ? 
                                 Theme.of(context).colorScheme.primary 
                                 : Theme.of(context).backgroundColor,
                               shape: RoundedRectangleBorder( borderRadius: BorderRadius.circular(4)),
@@ -72,13 +74,13 @@ class _SearchResultItemDetailState extends State<SearchResultItemDetail> {
                               children: [
                                 // User profile pic/avatar
                                 Hero(
-                                  tag: widget.item.fullName as String,
+                                  tag: widget.item.fullName! + widget.index.toString(),
                                   child: Container(
                                     child: widget.item.owner!.avatarUrl != null ?
                                       Image.network(widget.item.owner!.avatarUrl as String, height: 100) : 
                                       CircleAvatar(
                                         radius: 50,
-                                        backgroundColor: MyApp.themeNotifier.value == ThemeMode.light ? 
+                                        backgroundColor: Provider.of<SettingsModel>(context, listen: false).theme == ThemeMode.light ? 
                                           Theme.of(context).colorScheme.primary 
                                           : Theme.of(context).backgroundColor,
                                         child: const Icon(Icons.person, size: 80, color: Colors.white)
@@ -221,7 +223,7 @@ class _SearchResultItemDetailState extends State<SearchResultItemDetail> {
                               icon: const Icon(Icons.archive), 
                               label: Text('repoCheck'.tr()),
                               style: ElevatedButton.styleFrom(
-                                primary: MyApp.themeNotifier.value == ThemeMode.light ? 
+                                primary: Provider.of<SettingsModel>(context, listen: false).theme == ThemeMode.light ? 
                                   Theme.of(context).colorScheme.primary 
                                   : Theme.of(context).backgroundColor
                               ),
@@ -235,7 +237,7 @@ class _SearchResultItemDetailState extends State<SearchResultItemDetail> {
                               icon: const Icon(Icons.person), 
                               label: Text('profileCheck'.tr()),
                               style: ElevatedButton.styleFrom(
-                                primary: MyApp.themeNotifier.value == ThemeMode.light ? 
+                                primary: Provider.of<SettingsModel>(context, listen: false).theme == ThemeMode.light ? 
                                   Theme.of(context).colorScheme.primary 
                                   : Theme.of(context).backgroundColor
                               ),

@@ -1,5 +1,5 @@
-import 'package:gitsearch/Models/history_model.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:gitsearch/Models/history_model.dart';
 import 'package:gitsearch/Services/db_handler.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';

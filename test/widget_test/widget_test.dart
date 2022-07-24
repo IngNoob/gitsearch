@@ -7,6 +7,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:gitsearch/Common/utils.dart' as utils;
 import 'package:gitsearch/Items/search_result.dart';
 import 'package:gitsearch/Models/history_model.dart';
 import 'package:gitsearch/Models/search_model.dart';
@@ -17,7 +18,7 @@ import 'package:gitsearch/Widgets/search_result_item_card.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
-import 'package:gitsearch/Common/utils.dart' as utils;
+
 import '../unit_test/search_provider_test.mocks.dart';
 
  

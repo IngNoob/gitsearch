@@ -1,11 +1,10 @@
 import 'dart:collection';
 import 'dart:io';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gitsearch/Common/utils.dart';
-import 'package:gitsearch/Services/db_handler.dart';
 import 'package:gitsearch/Items/history_item.dart';
+import 'package:gitsearch/Services/db_handler.dart';
 import 'package:sqflite/sqlite_api.dart';
 
 class HistoryModel extends ChangeNotifier{

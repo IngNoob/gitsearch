@@ -1,10 +1,9 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:gitsearch/Items/search_query.dart';
 import 'package:gitsearch/Items/search_result.dart';
 import 'package:http/http.dart' as http;
-
-import 'dart:convert';
 
 class GitHubService{
 

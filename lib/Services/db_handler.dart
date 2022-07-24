@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:sqflite/sqflite.dart';
 import 'package:gitsearch/Items/history_item.dart';
+import 'package:sqflite/sqflite.dart';
 
 class DBHandler {
 

@@ -25,7 +25,6 @@ class SearchModel extends ChangeNotifier{
   // choose different ways of how to provide said feedback
   final OnExceptionCatch exceptionCatcher;
 
-
   final List<String> _foundRepos = [];
 
   bool _isBusy = false;
@@ -51,7 +50,7 @@ class SearchModel extends ChangeNotifier{
       _queryParams.keyword = keyword;
       _queryParams.page = Globals.apiPageDefault;
       _searchResult = await gitService.repoSearch(queryParams);
-      _searchResult.items = _filterRepos(_searchResult);
+      //_searchResult.items = _filterRepos(_searchResult);
 
     }catch(e){
       res = false;
@@ -82,10 +81,13 @@ class SearchModel extends ChangeNotifier{
       _queryParams.page++;
       final SearchResult res = await gitService.repoSearch(queryParams);
 
-      res.items = _filterRepos(res);
+      //res.items = _filterRepos(res);
 
       if(res.items != null){
         _searchResult.items?.addAll(res.items!.toList());
+      }else{
+        // It is a rare case but sometimes github will not return more data and the query needs to be done again
+        _queryParams.page--;
       }
 
     }catch(e){
@@ -114,9 +116,11 @@ class SearchModel extends ChangeNotifier{
     // https://github.com/Giphy/GiphyAPI/issues/235
     // Sometimes elements come in duplicate, due to recent updates or because
     // there are achived versions with the same name. To avoid duplicates and unwanted errors, 
-    // we filter the list
+    // we filter the list。Nonetheless, due to speed (specially in large lists), we are going to skip this
+    // and instead pass the hero widget the index in the list too.
     // たまに同じレポ二回以上出てくるなので、同じもの何回表示しないように、またエラーがないため（HeroWidgetとか）
-    //　貰った検索結果をフィルタリングします
+    //　貰った検索結果をフィルタリングします。でも、スピードのために、とりあえずこの処理スキップします。その代わりにHeroに
+    //　一覧のindexを渡します
 
     final List<SearchResultItem> filteredItems = [];
     if (res.items != null){
